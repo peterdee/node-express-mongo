@@ -1,0 +1,87 @@
+#!/usr/bin/env node
+const env = require('dotenv').config();
+
+if (env.error) {
+  throw new Error(env.error.stack || env.message || env.error);
+}
+
+const cluster = require('cluster');
+const CPUs = require('os').cpus().length;
+const debug = require('debug')('node-express-mongo:server');
+const http = require('http');
+
+const app = require('../app');
+
+/**
+ * Normalize application port
+ * @param val {*} - port or named pipe
+ * @return {boolean|number|*}
+ */
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+  if (Number.isNaN(Number(port))) {
+    return val;
+  }
+  if (port >= 0) {
+    return port;
+  }
+  return false;
+}
+
+const port = (process.env.PORT && normalizePort(process.env.PORT)) || 2211;
+app.set('port', port);
+
+const server = http.createServer(app);
+
+/**
+ * Error on launch
+ * @param error {*} - error stack
+ */
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+  const bind = typeof port === 'string'
+    ? `Pipe ${port}`
+    : `Port ${port}`;
+
+  switch (error.code) {
+    case 'EACCES':
+      utils.log(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      utils.log(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * On successful launch
+ */
+function onListening() {
+  const addr = server.address();
+  const bind = typeof addr === 'string'
+    ? `pipe ${addr}`
+    : `port ${addr.port}`;
+  debug(`Listening on ${bind}`);
+}
+
+// clustering
+if (cluster.isMaster) {
+  for (let i = 0; i < CPUs; i += 1) {
+    cluster.fork({ workerId: i });
+  }
+
+  cluster.on('exit', (worker) => cluster.fork(worker.workerId ? { workerId : worker.workerId } : {}));
+} else {
+  // run the server
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}
+
+module.exports = server;
