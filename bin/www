@@ -76,7 +76,7 @@ if (cluster.isMaster) {
     cluster.fork({ workerId: i });
   }
 
-  cluster.on('exit', (worker) => cluster.fork(worker.workerId ? { workerId : worker.workerId } : {}));
+  cluster.on('exit', ({ workerId = null }) => cluster.fork(workerId ? { workerId } : {}));
 } else {
   // run the server
   server.listen(port);
