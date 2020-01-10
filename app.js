@@ -1,8 +1,9 @@
 const express = require('express');
 const logger = require('morgan');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const { APIS } = require('./config');
+
+const login = require('./routes/login');
 
 const app = express();
 
@@ -10,8 +11,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.login}`, login);
 
 app.all('*', (req, res) => res.status(404).send({
   info: 'NOT_FOUND',
