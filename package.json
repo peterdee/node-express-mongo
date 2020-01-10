@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "stage": "node ./bin/www"
   },
   "dependencies": {
     "debug": "~2.6.9",
