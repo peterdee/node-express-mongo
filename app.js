@@ -2,9 +2,6 @@ const express = require('express');
 const logger = require('morgan');
 
 const { APIS } = require('./config');
-const db = require('./db');
-
-// db.findOne({ name: 'JACK' }).then((res) => console.log(res)).catch((err) => console.log(err));
 
 const login = require('./routes/login');
 
