@@ -4,6 +4,7 @@ const { env: ev } = process;
 const APIS = {
   paths: {
     login: 'login',
+    registration: 'registration',
   },
   prefix: 'api',
   version: 'v1',
@@ -18,6 +19,7 @@ const ENVS = {
 const { APP_ENV: ENV = ENVS.dev } = ev;
 // database connection and settings
 const DATABASE = {
+  enableSeeding: ev.DB_ENABLE_SEEDING === "true",
   env: ev.DB_ENV || ENVS.dev,
   host: ev.DB_HOST || 'localhost',
   name: ev.DB_NAME,
@@ -27,6 +29,13 @@ const DATABASE = {
 };
 // application port
 const PORT = Number(ev.APP_PORT) || 2211;
+// data for default seeded user
+const USER = {
+  email: ev.USER_EMAIL,
+  firstName: ev.USER_FIRSTNAME,
+  lastName: ev.USER_LASTNAME,
+  password: ev.USER_PASSWORD,
+};
 
 module.exports = {
   APIS,
@@ -34,4 +43,5 @@ module.exports = {
   ENV,
   ENVS,
   PORT,
+  USER,
 };
