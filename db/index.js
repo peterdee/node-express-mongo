@@ -5,6 +5,7 @@ const path = require('path');
 
 const { DATABASE: DB } = require('../config');
 const { log } = require('../services/utilities');
+const seeding = require('./seeding');
 
 const basename = path.basename(__filename);
 
@@ -29,12 +30,15 @@ connection.once('open', () => isMaster && log(`-- database: connected`));
 process.on('SIGINT', () => connection.close(() => isMaster && log(`-- database: closing connection`)));
 
 // load schemas and create models
-fs.readdirSync(`${__dirname}/schemas`).filter(
-  (file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'),
-).forEach((file) => {
-  const [schema] = file.split('.');
-  const name = `${schema[0].toUpperCase()}${schema.slice(1)}`;
-  connection[name] = mongoose.model(name, require(`./schemas/${file}`)(mongoose));
-});
+fs.readdirSync(`${__dirname}/schemas`)
+  .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
+  .forEach((file) => {
+    const [schema] = file.split('.');
+    const name = `${schema[0].toUpperCase()}${schema.slice(1)}`;
+    connection[name] = mongoose.model(name, require(`./schemas/${file}`)(mongoose));
+  });
+
+// seeding
+seeding(connection);
 
 module.exports = connection;
