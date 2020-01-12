@@ -1,5 +1,5 @@
 {
-  "name": "node-express-mongoo",
+  "name": "node-express-mongo",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
     "bcrypt": "^3.0.7",
     "dotenv": "^8.2.0",
     "express": "~4.16.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.7",
     "morgan": "~1.9.0"
   },
