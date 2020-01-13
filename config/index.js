@@ -46,11 +46,13 @@ const RESPONSE_STATUSES = {
   401: 401,
   403: 403,
   404: 404,
+  429: 429,
   500: 500,
 };
 // default server response messages ('info' field)
 const SERVER_MESSAGES = {
   accessDenied: 'ACCESS_DENIED',
+  emailAlreadyInUse: 'EMAIL_ALREADY_IN_USE',
   internalServerError: 'INTERNAL_SERVER_ERROR',
   invalidData: 'INVALID_DATA',
   invalidToken: 'INVALID_TOKEN',
@@ -58,6 +60,7 @@ const SERVER_MESSAGES = {
   missingToken: 'MISSING_TOKEN',
   noAdditionalInformation: 'NO_ADDITIONAL_INFORMATION',
   ok: 'OK',
+  requestLimitExceeded: 'REQUEST_LIMIT_EXCEEDED',
   resourceNotFound: 'RESOURCE_NOT_FOUND',
 };
 // default values for the tokens

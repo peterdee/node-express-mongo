@@ -1,4 +1,7 @@
+const compression = require('compression');
 const express = require('express');
+const helmet = require('helmet');
+const limiter = require('express-rate-limit');
 const logger = require('morgan');
 
 const { basic } = require('./services/responses');
@@ -11,6 +14,15 @@ const registration = require('./routes/registration');
 
 const app = express();
 
+// run the rate limiter first
+app.use(limiter({
+  handler: (req, res) => basic(req, res, rs[429], sm.requestLimitExceeded),
+  max: 500,
+  windowMs: 150000,
+}));
+
+app.use(compression());
+app.use(helmet());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
