@@ -2,9 +2,35 @@
   "name": "node-express-mongo",
   "version": "0.0.1",
   "private": true,
+  "author": {
+    "name": "Peter Dyumin",
+    "url": "https://github.com/peterdee"
+  },
+  "description": "Node, Express, Mongo",
+  "homepage": "https://github.com/peterdee/node-exporess-mongo",
+  "license": "ISC",
+  "keywords": [
+    "Express",
+    "Nongo",
+    "Node"
+  ],
   "scripts": {
     "dev": "nodemon ./bin/www",
+    "lint": "eslint",
+    "lint-staged": "lint-staged",
     "stage": "node ./bin/www"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint"
+  },
+  "pre-commit": "lint-staged",
+  "engines": {
+    "node": "13.6.0",
+    "npm": "6.13.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterdee/node-exporess-mongo"
   },
   "dependencies": {
     "bcrypt": "^3.0.7",
@@ -15,6 +41,11 @@
     "morgan": "~1.9.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.0",
+    "lint-staged": "^8.1.5",
+    "nodemon": "^1.19.1",
+    "pre-commit": "^1.2.2"
   }
 }
