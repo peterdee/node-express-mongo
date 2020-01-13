@@ -62,6 +62,7 @@ const SERVER_MESSAGES = {
   ok: 'OK',
   requestLimitExceeded: 'REQUEST_LIMIT_EXCEEDED',
   resourceNotFound: 'RESOURCE_NOT_FOUND',
+  tokenExpired: 'TOKEN_EXPIRED',
 };
 // default values for the tokens
 const TOKENS = {
