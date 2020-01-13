@@ -10,7 +10,7 @@ const { getSeconds, log } = require('../services/utilities');
  * @returns {Promise}
  */
 module.exports = async (database) => {
-  if (isMaster) {
+  if (!isMaster) {
     return false;
   }
 
