@@ -4,6 +4,6 @@ const registration = require('./registration.controller');
 
 const router = express.Router();
 
-router.get('/', registration);
+router.post('/', registration);
 
 module.exports = router;

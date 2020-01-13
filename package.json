@@ -11,7 +11,7 @@
   "license": "ISC",
   "keywords": [
     "Express",
-    "Nongo",
+    "Mongo",
     "Node"
   ],
   "scripts": {
@@ -34,8 +34,11 @@
   },
   "dependencies": {
     "bcrypt": "^3.0.7",
+    "compression": "^1.7.4",
     "dotenv": "^8.2.0",
     "express": "~4.16.0",
+    "express-rate-limit": "^5.0.0",
+    "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.7",
     "morgan": "~1.9.0"
