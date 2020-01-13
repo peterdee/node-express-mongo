@@ -1,7 +1,10 @@
 const express = require('express');
 const logger = require('morgan');
 
-const { APIS } = require('./config');
+const { basic } = require('./services/responses');
+const config = require('./config');
+
+const { APIS, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 
 const login = require('./routes/login');
 const registration = require('./routes/registration');
@@ -15,9 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.login}`, login);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.registration}`, registration);
 
-app.all('*', (req, res) => res.status(404).send({
-  info: 'NOT_FOUND',
-  status: 404,
-}));
+// handle non-existing routes
+app.all('*', (req, res) => basic(req, res, rs[404], sm.resourceNotFound));
 
 module.exports = app;

@@ -1,4 +1,9 @@
-const { ENV, ENVS } = require('../config');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const config = require('../config');
+
+const { ENV, ENVS, TOKENS } = config;
 
 /**
  * Check data fields in the request
@@ -10,6 +15,42 @@ const checkData = (fields = [], source = {}) => fields.reduce((arr, item) => {
   if (!source[item]) arr.push(item);
   return arr;
 }, []);
+
+/**
+ * Generate random alpha-numeric string
+ * @param length {number} - string length
+ * @return {string|string}
+ */
+const generateString = (length = 16) => {
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let result = '';
+  for (let i = length; i > 0; i -= 1) {
+    result += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return result;
+};
+
+/**
+ * Generate image string
+ * @param userId {number|string|null} - user ID
+ * @returns {Promise<string>}
+ */
+const generateImage = (userId = null) => bcrypt.hash(
+  `${userId}X${generateString(10)}X${Date.now()}X${generateString(10)}`,
+  10,
+);
+
+/**
+ * Generate access and refresh tokens for the user
+ * @param id {number|string|null} - user ID
+ * @param accessImage {string} - unique string for the access token
+ * @param refreshImage {string} - unique string for the refresh token
+ * @return {Promise<{access: *, refresh: *}>}
+ */
+const generateTokens = async (id = null, accessImage = '', refreshImage = '') => ({
+  access: jwt.sign({ id, accessImage }, TOKENS.access.secret, { expiresIn: TOKENS.access.expiration }),
+  refresh: jwt.sign({ id, refreshImage }, TOKENS.refresh.secret, { expiresIn: TOKENS.refresh.expiration }),
+});
 
 /**
  * Get timestamp in seconds
@@ -45,6 +86,9 @@ const validateData = (items = []) => items.reduce((arr, { field = '', type = '',
 module.exports = {
   checkData,
   getSeconds,
+  generateImage,
+  generateString,
+  generateTokens,
   log,
   validateData,
 };

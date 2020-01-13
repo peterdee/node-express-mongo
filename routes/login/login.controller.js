@@ -1,7 +1,11 @@
-// const { data } = require('../../services/responses');
-const { DATA_TYPES } = require('../../config');
-// const db = require('../../db');
+const bcrypt = require('bcrypt');
+
+const { basic, data, internalError } = require('../../services/responses');
+const config = require('../../config');
+const db = require('../../db');
 const utils = require('../../services/utilities');
+
+const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 
 /**
  * Login for a user
@@ -19,16 +23,74 @@ module.exports = async (req, res) => {
     ];
     const missing = utils.checkData(expected.map(({ field }) => field), req.body);
     if (missing.length > 0) {
-      utils.log('> res', res);
-      // return data(req, res, )
+      return data(req, res, rs[400], sm.missingData, { missing });
     }
     const invalid = utils.validateData(expected);
     if (invalid.length > 0) {
-      // return data(ctx, statuses[400], sm.invalidData, { invalid });
+      return data(req, res, rs[400], sm.invalidData, { invalid });
     }
 
-    return true;
-  } catch (err) {
-    return utils.log(err);
+    // find the user by email
+    const userRecord = await db.User.findOne({
+      email,
+      isDeleted: false,
+    });
+    if (!userRecord) {
+      return basic(req, res, rs[401], sm.accessDenied);
+    }
+
+    // find access image and password records
+    const query = {
+      userId: userRecord.id,
+      isDeleted: false,
+    };
+    const [accessImageRecord, passwordRecord] = await Promise.all([
+      db.AccessImage.findOne(query),
+      db.Password.findOne(query),
+    ]);
+    if (!passwordRecord) {
+      return basic(req, res, rs[401], sm.accessDenied);
+    }
+
+    // compare hashes
+    const comparison = await bcrypt.compare(password, passwordRecord.hash);
+    if (!comparison) {
+      return basic(req, res, rs[401], sm.accessDenied);
+    }
+
+    // make sure that access image exists
+    const seconds = utils.getSeconds();
+    let { image: accessImage = '' } = accessImageRecord || {};
+    if (!accessImage) {
+      accessImage = await utils.generateImage(userRecord.id);
+
+      // store access image in the database
+      const NewAccessImage = new db.AccessImage({
+        userId: userRecord.id,
+        image: accessImage,
+        created: seconds,
+        updated: seconds,
+      });
+      await NewAccessImage.save();
+    }
+
+    // generate tokens
+    const refreshImage = await utils.generateImage(userRecord.id);
+    const tokens = await utils.generateTokens(userRecord.id, accessImage, refreshImage);
+
+    // store refresh token in the database
+    const RefreshToken = new db.RefreshToken({
+      userId: userRecord.id,
+      refreshImage,
+      token: tokens.refresh,
+      expirationDate: `${Date.now() + (config.TOKENS.refresh.expiration * 1000)}`,
+      created: seconds,
+      updated: seconds,
+    });
+    await RefreshToken.save();
+
+    return data(req, res, rs[200], sm.ok, { tokens });
+  } catch (error) {
+    return internalError(req, res, error);
   }
 };
