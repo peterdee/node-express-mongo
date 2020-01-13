@@ -23,11 +23,11 @@ const { connection } = mongoose;
 if (!connection) throw new Error('-- database: connection failed');
 
 connection.on('error', (error) => isMaster && log(`-- database: ERROR\n${error}`));
-connection.on('disconnected', () => isMaster && log(`-- database: disconnected`));
-connection.once('open', () => isMaster && log(`-- database: connected`));
+connection.on('disconnected', () => isMaster && log('-- database: disconnected'));
+connection.once('open', () => isMaster && log('-- database: connected'));
 
 // handle process termination: close database connection
-process.on('SIGINT', () => connection.close(() => isMaster && log(`-- database: closing connection`)));
+process.on('SIGINT', () => connection.close(() => isMaster && log('-- database: closing connection')));
 
 // load schemas and create models
 fs.readdirSync(`${__dirname}/schemas`)
@@ -35,6 +35,7 @@ fs.readdirSync(`${__dirname}/schemas`)
   .forEach((file) => {
     const [schema] = file.split('.');
     const name = `${schema[0].toUpperCase()}${schema.slice(1)}`;
+    /* eslint-disable-next-line */
     connection[name] = mongoose.model(name, require(`./schemas/${file}`)(mongoose));
   });
 

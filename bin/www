@@ -31,7 +31,7 @@ if (cluster.isMaster) {
     if (error.syscall !== 'listen') {
       throw error;
     }
-  
+
     switch (error.code) {
       case 'EACCES':
         log(`${PORT} requires elevated privileges`);
