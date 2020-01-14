@@ -10,7 +10,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * Authenticate user
  * @param req {object} - request object
  * @param res {object} - response object
- * @param next {*}
+ * @param next {*} - continue to the next controller or middleware
  * @return {Promise<*>}
  */
 module.exports = async (req, res, next) => {

@@ -3,6 +3,7 @@ const { env: ev } = process;
 // API properties
 const APIS = {
   paths: {
+    changePassword: 'change-password',
     login: 'login',
     registration: 'registration',
   },
@@ -37,6 +38,11 @@ const DATABASE = {
 };
 // application environment
 const { APP_ENV: ENV = ENVS.dev } = ev;
+// default pagination
+const PAGINATION = {
+  limit: 15,
+  page: 1,
+};
 // application port
 const PORT = Number(ev.APP_PORT) || 2211;
 // available server response statuses
@@ -89,6 +95,7 @@ module.exports = {
   DATABASE,
   ENV,
   ENVS,
+  PAGINATION,
   PORT,
   RESPONSE_STATUSES,
   SERVER_MESSAGES,

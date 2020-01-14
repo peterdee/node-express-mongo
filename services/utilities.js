@@ -59,6 +59,13 @@ const generateTokens = async (id = null, accessImage = '', refreshImage = '') =>
 const getSeconds = () => Math.ceil(Date.now() / 1000);
 
 /**
+ * Check if the provided value is NUMBER
+ * @param value {*} - value to check
+ * @returns {boolean}
+ */
+const isNumber = (value) => !Number.isNaN(Number(value));
+
+/**
  * Show console log
  * @param text {string} - string to log
  * @param data {*} - additional data to log
@@ -89,6 +96,7 @@ module.exports = {
   generateImage,
   generateString,
   generateTokens,
+  isNumber,
   log,
   validateData,
 };
