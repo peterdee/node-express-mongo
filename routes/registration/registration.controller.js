@@ -8,7 +8,7 @@ const utils = require('../../services/utilities');
 const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 
 /**
- * Login for a user
+ * Registration for a user
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {Promise<void>}
