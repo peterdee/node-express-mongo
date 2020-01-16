@@ -30,18 +30,12 @@ module.exports = async (req, res) => {
       return data(req, res, rs[400], sm.invalidData, { invalid });
     }
 
-    // find password and user records
-    const [passwordRecord, userRecord] = await Promise.all([
-      db.Password.findOne({
-        userId: req.id,
-        isDeleted: false,
-      }),
-      db.User.findOne({
-        id: req.id,
-        isDeleted: false,
-      }),
-    ]);
-    if (!(passwordRecord && userRecord)) {
+    // find password record
+    const passwordRecord = await db.Password.findOne({
+      userId: req.id,
+      isDeleted: false,
+    });
+    if (!passwordRecord) {
       return basic(req, res, rs[401], sm.accessDenied);
     }
 
@@ -51,10 +45,52 @@ module.exports = async (req, res) => {
       return basic(req, res, rs[400], 'OLD_PASSWORD_IS_INVALID');
     }
 
-    // create new hash
-    // const hash = await bcrypt.hash(newPassword, 10);
+    // create new images and password hash, mark all of the refresh tokens as deleted
+    const seconds = utils.getSeconds();
+    const query = {
+      userId: req.id,
+      isDeleted: false,
+    };
+    const [accessImage, refreshImage, hash] = await Promise.all([
+      utils.generateImage(req.id),
+      utils.generateImage(req.id),
+      bcrypt.hash(newPassword, 10),
+      db.RefreshToken.updateMany(query, {
+        isDeleted: true,
+        updated: seconds,
+      }),
+    ]);
 
-    // TODO: update the password record
+    // generate new set of tokens
+    const tokens = await utils.generateTokens(req.id, accessImage, refreshImage);
+
+    // create new Refresh Token
+    const RefreshToken = new db.RefreshToken({
+      userId: req.id,
+      refreshImage,
+      token: tokens.refresh,
+      expirationDate: `${Date.now() + (config.TOKENS.refresh.expiration * 1000)}`,
+      created: seconds,
+      updated: seconds,
+    });
+
+    // save updates
+    await Promise.all([
+      db.AccessImage.updateMany(query, {
+        image: accessImage,
+        updated: seconds,
+      }),
+      db.Password.updateOne(
+        {
+          id: passwordRecord.id,
+        },
+        {
+          hash,
+          updated: seconds,
+        },
+      ),
+      RefreshToken.save(),
+    ]);
 
     return basic(req, res, rs[200], sm.ok);
   } catch (error) {
