@@ -5,6 +5,7 @@ const APIS = {
   paths: {
     changePassword: 'change-password',
     login: 'login',
+    logout: 'logout',
     passwordRecovery: 'password-recovery',
     registration: 'registration',
   },
