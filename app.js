@@ -11,6 +11,7 @@ const { APIS, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 
 const changePassword = require('./routes/change-password');
 const login = require('./routes/login');
+const logout = require('./routes/logout');
 const passwordRecovery = require('./routes/password-recovery');
 const registration = require('./routes/registration');
 
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changePassword}`, changePassword);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.login}`, login);
+app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.logout}`, logout);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.passwordRecovery}`, passwordRecovery);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.registration}`, registration);
 
