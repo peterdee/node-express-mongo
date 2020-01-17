@@ -38,6 +38,12 @@ const DATABASE = {
 };
 // application environment
 const { APP_ENV: ENV = ENVS.dev } = ev;
+// mailing service via nodemailer
+const MAIL_SERVICE = {
+  email: ev.MAIL_SERVICE_EMAIL,
+  password: ev.MAIL_SERVICE_PASSWORD,
+  service: 'gmail',
+};
 // default pagination
 const PAGINATION = {
   limit: 15,
@@ -95,6 +101,7 @@ module.exports = {
   DATABASE,
   ENV,
   ENVS,
+  MAIL_SERVICE,
   PAGINATION,
   PORT,
   RESPONSE_STATUSES,
