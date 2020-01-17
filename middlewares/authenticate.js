@@ -35,7 +35,7 @@ module.exports = async (req, res, next) => {
         isDeleted: false,
       }),
       db.User.findOne({
-        id,
+        _id: id,
         isDeleted: false,
       }),
     ]);
@@ -44,7 +44,8 @@ module.exports = async (req, res, next) => {
     }
 
     // continue
-    req.id = id;
+    req.id = userRecord.id;
+    req.role = userRecord.role;
     return next();
   } catch (err) {
     // check for expiration error
