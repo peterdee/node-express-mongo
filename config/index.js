@@ -5,6 +5,7 @@ const APIS = {
   paths: {
     changePassword: 'change-password',
     login: 'login',
+    passwordRecovery: 'password-recovery',
     registration: 'registration',
   },
   prefix: 'api',
@@ -38,6 +39,13 @@ const DATABASE = {
 };
 // application environment
 const { APP_ENV: ENV = ENVS.dev } = ev;
+const FRONTEND_URL = ev.APP_FRONTEND_URL || 'http://localhost:1122';
+// mailing service via nodemailer
+const MAIL_SERVICE = {
+  email: ev.MAIL_SERVICE_EMAIL,
+  password: ev.MAIL_SERVICE_PASSWORD,
+  service: 'gmail',
+};
 // default pagination
 const PAGINATION = {
   limit: 15,
@@ -95,6 +103,8 @@ module.exports = {
   DATABASE,
   ENV,
   ENVS,
+  FRONTEND_URL,
+  MAIL_SERVICE,
   PAGINATION,
   PORT,
   RESPONSE_STATUSES,
