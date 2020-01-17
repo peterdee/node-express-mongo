@@ -18,7 +18,7 @@ const transporter = nodeMailer.createTransport({
  * @param subject {string} - message subject
  * @param message {string} - message
  * @param files {*[]} - array of files
- * @returns {Promise<*|void>}
+ * @returns {*}
  */
 module.exports = (address = '', subject = '', message = '', files = []) => transporter.sendMail({
   from: MAIL_SERVICE.email,
