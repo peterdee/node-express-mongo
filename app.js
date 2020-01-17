@@ -13,6 +13,7 @@ const changePassword = require('./routes/change-password');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const passwordRecovery = require('./routes/password-recovery');
+const refreshTokens = require('./routes/refresh-tokens');
 const registration = require('./routes/registration');
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changePassword}`, changePa
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.login}`, login);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.logout}`, logout);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.passwordRecovery}`, passwordRecovery);
+app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.refreshTokens}`, refreshTokens);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.registration}`, registration);
 
 // handle non-existing routes

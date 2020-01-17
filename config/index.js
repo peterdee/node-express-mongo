@@ -7,6 +7,7 @@ const APIS = {
     login: 'login',
     logout: 'logout',
     passwordRecovery: 'password-recovery',
+    refreshTokens: 'refresh-tokens',
     registration: 'registration',
   },
   prefix: 'api',
