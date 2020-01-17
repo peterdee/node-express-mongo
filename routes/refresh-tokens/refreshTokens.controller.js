@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
         isDeleted: false,
       }),
       db.User.findOne({
-        id: refreshTokenRecord.userId,
+        _id: refreshTokenRecord.userId,
         isDeleted: false,
       }),
     ]);

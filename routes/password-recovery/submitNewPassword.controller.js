@@ -49,7 +49,7 @@ module.exports = async (req, res) => {
         isDeleted: false,
       }),
       db.User.findOne({
-        id: passwordRecoveryRecord.userId,
+        _id: passwordRecoveryRecord.userId,
         isDeleted: false,
       }),
     ]);
