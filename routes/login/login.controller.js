@@ -89,7 +89,7 @@ module.exports = async (req, res) => {
     });
     await RefreshToken.save();
 
-    return data(req, res, rs[200], sm.ok, { tokens });
+    return data(req, res, rs[200], sm.ok, { role: userRecord.role, tokens });
   } catch (error) {
     return internalError(req, res, error);
   }
