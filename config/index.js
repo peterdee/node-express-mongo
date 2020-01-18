@@ -80,6 +80,8 @@ const SERVER_MESSAGES = {
   resourceNotFound: 'RESOURCE_NOT_FOUND',
   tokenExpired: 'TOKEN_EXPIRED',
 };
+// server name for logs and emails
+const SERVER_NAME = 'NODE-EXPRESS-MONGO';
 // default values for the tokens
 const TOKENS = {
   access: {
@@ -111,6 +113,7 @@ module.exports = {
   PORT,
   RESPONSE_STATUSES,
   SERVER_MESSAGES,
+  SERVER_NAME,
   TOKENS,
   USER,
 };

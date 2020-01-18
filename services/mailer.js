@@ -27,6 +27,6 @@ module.exports = (address = '', subject = '', message = '', files = []) => trans
   html: message,
   attachments: files,
 }, (error, response) => {
-  if (error) return log('-- mailer: error', error.stack || error.message || error);
+  if (error) return log('-- mailer: error', error);
   return log(`-- mailer: sent to ${address} (${response})`);
 });

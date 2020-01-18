@@ -18,7 +18,7 @@
     "dev": "nodemon ./bin/www",
     "lint": "eslint",
     "lint-staged": "lint-staged",
-    "stage": "node ./bin/www"
+    "start": "node ./bin/www"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint"
@@ -38,6 +38,7 @@
     "dotenv": "^8.2.0",
     "express": "~4.16.0",
     "express-rate-limit": "^5.0.0",
+    "flatted": "^2.0.1",
     "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.7",
