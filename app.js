@@ -4,6 +4,7 @@ const favicon = require('serve-favicon');
 const helmet = require('helmet');
 const limiter = require('express-rate-limit');
 const logger = require('morgan');
+const path = require('path');
 
 const { basic } = require('./services/responses');
 const config = require('./config');
