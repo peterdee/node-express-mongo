@@ -26,6 +26,7 @@ const DATA_TYPES = {
 // available environments
 const ENVS = {
   dev: 'dev',
+  heroku: 'heroku',
   prod: 'prod',
   stage: 'stage',
 };
