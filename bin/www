@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-if (ENV !== ENVS.heroku) {
+if (process.env.ENV !== 'heroku') {
   const env = require('dotenv').config();
 
   if (env.error) {
@@ -13,7 +13,7 @@ const http = require('http');
 
 const app = require('../app');
 const { log } = require('../services/utilities');
-const { ENV, ENVS, PORT } = require('../config');
+const { ENV, PORT } = require('../config');
 
 app.set('port', PORT);
 const server = http.createServer(app);
