@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-const env = require('dotenv').config();
+if (process.env.ENV !== 'heroku') {
+  const env = require('dotenv').config();
 
-if (env.error) {
-  throw new Error(env.error.stack || env.message || env.error);
+  if (env.error) {
+    throw new Error(env.error.stack || env.message || env.error);
+  }
 }
 
 const cluster = require('cluster');
@@ -11,13 +13,13 @@ const http = require('http');
 
 const app = require('../app');
 const { log } = require('../services/utilities');
-const { ENV, ENVS, PORT } = require('../config');
+const { ENV, PORT } = require('../config');
 
 app.set('port', PORT);
 const server = http.createServer(app);
 
 // clustering
-if (cluster.isMaster && ENV !== ENVS.heroku) {
+if (cluster.isMaster) {
   for (let i = 0; i < CPUs; i += 1) {
     cluster.fork({ workerId: i });
   }
