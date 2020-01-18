@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-if (process.env.ENV !== 'heroku') {
+if (process.env.APP_ENV !== 'heroku') {
   const env = require('dotenv').config();
 
   if (env.error) {
