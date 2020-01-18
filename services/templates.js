@@ -55,4 +55,41 @@ module.exports = {
 </div>
     `,
   }),
+  /**
+   * Create a special error template
+   * @param error {string|*} - error to be sent
+   * @param func {string} - function name
+   * @param misc {string} - additional information
+   * @return {object}
+   */
+  createSpecialErrorTemplate: (error, func = '', misc = sm.noAdditionalInformation) => ({
+    subject: `${SERVER_NAME}: SPECIAL SERVER ERROR [${ENV.toUpperCase()}]`,
+    template: `
+<div style="background-color: #7a0004; padding: 5px 15px;">
+  <h1 style="color: white;">${SERVER_NAME}: SPECIAL SERVER ERROR [${ENV.toUpperCase()}]</h1>
+</div>
+<div style="font-size: 16px; padding: 5px 15px;">
+  <br>
+  <div>
+    <b>This is a notification about a special server error!</b>
+  </div>
+  <div>
+    <b>Error message:</b>
+  </div>
+  <div>${error}</div>
+  <div>
+    <b>Additional information:</b>
+  </div>
+  <div>${misc}</div>
+  <div>
+    <b>Function:</b>
+  </div>
+  <div>${func}</div>
+  <div>
+    <b>Date:</b>
+  </div>
+  <div>${new Date()} (${Date.now()})</div>
+</div>
+    `,
+  }),
 };

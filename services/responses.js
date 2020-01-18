@@ -1,6 +1,6 @@
 const config = require('../config');
 const { createInternalErrorTemplate } = require('./templates');
-const { log,  } = require('./utilities');
+const { log } = require('./utilities');
 const sendEmail = require('./mailer');
 const stringify = require('./stringify');
 
@@ -56,7 +56,7 @@ module.exports = {
     sendEmail(config.MAIL_SERVICE.email, subject, message);
 
     // dump the log into the console
-    log('-- INTERNAL SERVER ERROR:', error);
+    log('-- INTERNAL SERVER ERROR:\n', error);
 
     return res.status(rs[500]).send({
       datetime: Date.now(),
@@ -65,5 +65,19 @@ module.exports = {
       request: `${req.originalUrl} [${req.method}]`,
       status: rs[500],
     });
+  },
+  /**
+   * Send an email about a special server error
+   * @param error {object|string|*} - error object or string
+   * @param func {string} - name of the function that produced an error
+   * @return {*}
+   */
+  specialError: (error, func = '') => {
+    // dump the log into the console
+    log(`-- SPECIAL SERVER ERROR @ ${func}:\n`, error);
+
+    // send an email with a stringified error and function name
+    const { message, subject } = createSpecialErrorTemplate(stringify(error), func);
+    return sendEmail(config.MAIL_SERVICE.email, subject, message);
   },
 };
