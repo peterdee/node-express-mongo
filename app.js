@@ -1,5 +1,6 @@
 const compression = require('compression');
 const express = require('express');
+const favicon = require('serve-favicon');
 const helmet = require('helmet');
 const limiter = require('express-rate-limit');
 const logger = require('morgan');
@@ -26,6 +27,7 @@ app.use(limiter({
 }));
 
 app.use(compression());
+app.use(favicon(path.join(__dirname, 'assets', 'favicon.ico')));
 app.use(helmet());
 app.use(logger('dev'));
 app.use(express.json());
