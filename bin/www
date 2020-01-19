@@ -13,13 +13,13 @@ const http = require('http');
 
 const app = require('../app');
 const { log } = require('../services/utilities');
-const { ENV, PORT } = require('../config');
+const { ENV, ENVS, PORT } = require('../config');
 
 app.set('port', PORT);
 const server = http.createServer(app);
 
 // clustering
-if (cluster.isMaster) {
+if (cluster.isMaster && ENV !== ENVS.heroku) {
   for (let i = 0; i < CPUs; i += 1) {
     cluster.fork({ workerId: i });
   }
