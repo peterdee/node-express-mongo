@@ -2,8 +2,6 @@
 if (process.env.APP_ENV !== 'heroku') {
   const env = require('dotenv').config();
 
-  console.log('loading dotenv');
-
   if (env.error) {
     throw new Error(env.error.stack || env.message || env.error);
   }
@@ -20,10 +18,8 @@ const { ENV, ENVS, PORT } = require('../config');
 app.set('port', PORT);
 const server = http.createServer(app);
 
-console.log('current port: ', PORT);
-
 // clustering
-if (cluster.isMaster && ENV !== ENVS.heroku) {
+if (cluster.isMaster) {
   for (let i = 0; i < CPUs; i += 1) {
     cluster.fork({ workerId: i });
   }
@@ -31,10 +27,8 @@ if (cluster.isMaster && ENV !== ENVS.heroku) {
   cluster.on('exit', ({ workerId = null }) => cluster.fork(workerId ? { workerId } : {}));
   log(`Running on port ${PORT} [${ENV.toUpperCase()}], workers: ${CPUs}`);
 } else {
-  console.log('launching server on', PORT);
-
   // run the server
-  server.listen(PORT);
+  server.listen((ENV === ENVS.heroku && process.env.PORT) || PORT);
   server.on('error', (error) => {
     if (error.syscall !== 'listen') {
       throw error;
