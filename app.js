@@ -22,15 +22,15 @@ const registration = require('./routes/registration');
 
 const app = express();
 
-// run the rate limiter first
+// disable CORS for now
+app.options('*', cors({ origin: false }));
+
+// run the rate limiter
 app.use(limiter({
   handler: (req, res) => basic(req, res, rs[429], sm.requestLimitExceeded),
   max: 250,
   windowMs: 150000,
 }));
-
-// disable CORS for now
-app.use(cors({ origin: false }));
 
 app.use(compression());
 app.use(favicon(path.join(__dirname, 'assets', 'favicon.ico')));
