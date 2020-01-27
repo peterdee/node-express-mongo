@@ -22,8 +22,12 @@ const registration = require('./routes/registration');
 
 const app = express();
 
+console.log('-------------------==================> pre-cors');
+
 // disable CORS for now
-app.options('*', cors({ origin: false }));
+app.use(cors({ origin: false }));
+
+console.log('-------------------==================> post-cors');
 
 // run the rate limiter
 app.use(limiter({
