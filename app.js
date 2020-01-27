@@ -1,4 +1,5 @@
 const compression = require('compression');
+const cors = require('cors');
 const express = require('express');
 const favicon = require('serve-favicon');
 const helmet = require('helmet');
@@ -24,9 +25,12 @@ const app = express();
 // run the rate limiter first
 app.use(limiter({
   handler: (req, res) => basic(req, res, rs[429], sm.requestLimitExceeded),
-  max: 500,
+  max: 250,
   windowMs: 150000,
 }));
+
+// disable CORS for now
+app.use(cors({ origin: false }));
 
 app.use(compression());
 app.use(favicon(path.join(__dirname, 'assets', 'favicon.ico')));
