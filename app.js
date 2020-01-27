@@ -25,7 +25,7 @@ const app = express();
 console.log('-------------------==================> pre-cors');
 
 // disable CORS for now
-app.use(cors({ origin: false }));
+app.use(cors());
 
 console.log('-------------------==================> post-cors');
 
