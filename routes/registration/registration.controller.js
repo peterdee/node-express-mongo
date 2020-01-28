@@ -100,7 +100,7 @@ module.exports = async (req, res) => {
       RefreshToken.save(),
     ]);
 
-    return data(req, res, rs[200], sm.ok, { tokens });
+    return data(req, res, rs[200], sm.ok, { role: User.role, tokens });
   } catch (error) {
     return internalError(req, res, error);
   }
