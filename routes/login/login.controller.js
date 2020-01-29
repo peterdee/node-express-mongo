@@ -39,7 +39,13 @@ module.exports = async (req, res) => {
       return basic(req, res, rs[401], sm.accessDenied);
     }
 
+    // additional check
+    if (userRecord.accountStatus && userRecord.accountStatus === config.ACCOUNT_STATUSES.blocked) {
+      return basic(req, res, rs[403], 'ACCOUNT_IS_BLOCKED');
+    }
+
     // find access image and password records
+    const seconds = utils.getSeconds();
     const query = {
       userId: userRecord.id,
       isDeleted: false,
@@ -49,17 +55,44 @@ module.exports = async (req, res) => {
       db.Password.findOne(query),
     ]);
     if (!passwordRecord) {
+      // block the account
+      await db.User.updateOne(
+        {
+          _id: userRecord.id,
+        },
+        {
+          accountStatus: config.ACCOUNT_STATUSES.blocked,
+          updated: seconds,
+        },
+      );
       return basic(req, res, rs[401], sm.accessDenied);
     }
 
     // compare hashes
     const comparison = await bcrypt.compare(password, passwordRecord.hash);
     if (!comparison) {
+      // brute force protection
+      const failedLoginAttempts = userRecord.failedLoginAttempts < 5
+        ? userRecord.failedLoginAttempts + 1
+        : 5;
+      const accountStatus = failedLoginAttempts < 5
+        ? config.ACCOUNT_STATUSES.active
+        : config.ACCOUNT_STATUSES.blocked;
+      await db.User.updateOne(
+        {
+          _id: userRecord.id,
+        },
+        {
+          accountStatus,
+          failedLoginAttempts,
+          updated: seconds,
+        },
+      );
+
       return basic(req, res, rs[401], sm.accessDenied);
     }
 
     // make sure that access image exists
-    const seconds = utils.getSeconds();
     let { image: accessImage = '' } = accessImageRecord || {};
     if (!accessImage) {
       accessImage = await utils.generateImage(userRecord.id);

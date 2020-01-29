@@ -1,5 +1,10 @@
 const { env: ev } = process;
 
+// account statuses
+const ACCOUNT_STATUSES = {
+  active: 'active',
+  blocked: 'blocked',
+};
 // API properties
 const APIS = {
   paths: {
@@ -49,6 +54,8 @@ const MAIL_SERVICE = {
   password: ev.MAIL_SERVICE_PASSWORD,
   service: 'gmail',
 };
+// maximum value of the failed login attempts
+const MAXIMUM_FAILED_LOGIN_ATTEMPTS = 5;
 // default pagination
 const PAGINATION = {
   limit: 15,
@@ -103,6 +110,7 @@ const USER = {
 };
 
 module.exports = {
+  ACCOUNT_STATUSES,
   APIS,
   DATA_TYPES,
   DATABASE,
@@ -110,6 +118,7 @@ module.exports = {
   ENVS,
   FRONTEND_URL,
   MAIL_SERVICE,
+  MAXIMUM_FAILED_LOGIN_ATTEMPTS,
   PAGINATION,
   PORT,
   RESPONSE_STATUSES,
