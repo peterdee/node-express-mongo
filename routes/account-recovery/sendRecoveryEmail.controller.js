@@ -1,6 +1,6 @@
 const { basic, data, internalError } = require('../../services/responses');
 const config = require('../../config');
-const { createPasswordRecoveryTemplate } = require('../../services/templates');
+const { createAccountRecoveryTemplate } = require('../../services/templates');
 const db = require('../../db');
 const mailer = require('../../services/mailer');
 const utils = require('../../services/utilities');
@@ -16,7 +16,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 module.exports = async (req, res) => {
   try {
     // check and validate data
-    const { email } = req.body;
+    const { email = '' } = req.body;
     const expected = [{ field: 'email', type: DATA_TYPES.string, value: email }];
     const missing = utils.checkData(expected.map(({ field }) => field), req.body);
     if (missing.length > 0) {
@@ -29,6 +29,7 @@ module.exports = async (req, res) => {
 
     // find user record by email
     const userRecord = await db.User.findOne({
+      accountStatus: config.ACCOUNT_STATUSES.blocked,
       email,
       isDeleted: false,
     });
@@ -38,7 +39,7 @@ module.exports = async (req, res) => {
 
     // invalidate all of the previously sent codes
     const seconds = utils.getSeconds();
-    await db.PasswordRecoveryCode.updateMany(
+    await db.AccountRecoveryCode.updateMany(
       {
         isDeleted: false,
         userId: userRecord.id,
@@ -51,18 +52,18 @@ module.exports = async (req, res) => {
 
     // create a new Password Recovery Code record
     const code = utils.generateString(32);
-    const PasswordRecoveryCode = new db.PasswordRecoveryCode({
+    const AccountRecoveryCode = new db.AccountRecoveryCode({
       userId: userRecord.id,
       code,
       expirationDate: `${Date.now() + (config.TOKENS.refresh.expiration * 1000)}`,
       created: seconds,
       updated: seconds,
     });
-    await PasswordRecoveryCode.save();
+    await AccountRecoveryCode.save();
 
     // send an email
-    const recoveryLink = `${config.FRONTEND_URL}/password-recovery/${code}`;
-    const { message, subject } = createPasswordRecoveryTemplate(recoveryLink, userRecord.fullName);
+    const recoveryLink = `${config.FRONTEND_URL}/account-recovery/verify/${code}`;
+    const { message, subject } = createAccountRecoveryTemplate(recoveryLink, userRecord.fullName);
     mailer(email, subject, message);
 
     return basic(req, res, rs[200], sm.ok);

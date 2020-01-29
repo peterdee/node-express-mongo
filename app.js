@@ -12,6 +12,7 @@ const config = require('./config');
 
 const { APIS, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 
+const accountRecovery = require('./routes/account-recovery');
 const changePassword = require('./routes/change-password');
 const index = require('./routes/index');
 const login = require('./routes/login');
@@ -40,6 +41,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/', index);
+app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.accountRecovery}`, accountRecovery);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changePassword}`, changePassword);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.login}`, login);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.logout}`, logout);

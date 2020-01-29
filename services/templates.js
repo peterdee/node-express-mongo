@@ -2,6 +2,31 @@ const { ENV, SERVER_NAME, SERVER_MESSAGES: sm } = require('../config');
 
 module.exports = {
     /**
+   * Create a password recovery template
+   * @param recoveryLink {string} - recovery link
+   * @param userName {string} - user name
+   * @return {object}
+   */
+  createAccountRecoveryTemplate: (recoveryLink = '', userName = '') => ({
+    subject: `${SERVER_NAME}: Account Recovery`,
+    template: `
+<div style="background-color: #006d0d; padding: 5px 15px;">
+  <h1 style="color: white;">${SERVER_NAME}: Account Recovery</h1>
+</div>
+<div style="font-size: 16px; padding: 5px 15px;">
+  <br>
+  <div>Hi <b>${userName}</b>!</div>
+  <br>
+  <div>
+    <b>Your Account Recovery link:</b>
+  </div>
+  <br>
+  <div><a href="${recoveryLink}">${recoveryLink}</a></div>
+  <br>
+</div>
+    `,
+  }),
+    /**
    * Create an internal error template
    * @param error {string|*} - error to be sent
    * @return {object}

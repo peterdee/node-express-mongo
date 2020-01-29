@@ -8,6 +8,7 @@ const ACCOUNT_STATUSES = {
 // API properties
 const APIS = {
   paths: {
+    accountRecovery: 'account-recovery',
     changePassword: 'change-password',
     login: 'login',
     logout: 'logout',
@@ -55,7 +56,7 @@ const MAIL_SERVICE = {
   service: 'gmail',
 };
 // maximum value of the failed login attempts
-const MAXIMUM_FAILED_LOGIN_ATTEMPTS = 5;
+const MAXIMUM_FAILED_LOGIN_ATTEMPTS = 10;
 // default pagination
 const PAGINATION = {
   limit: 15,
@@ -75,6 +76,7 @@ const RESPONSE_STATUSES = {
 };
 // default server response messages ('info' field)
 const SERVER_MESSAGES = {
+  accountIsBlocked: 'ACCOUNT_IS_BLOCKED',
   accessDenied: 'ACCESS_DENIED',
   emailAlreadyInUse: 'EMAIL_ALREADY_IN_USE',
   internalServerError: 'INTERNAL_SERVER_ERROR',

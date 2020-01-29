@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
 
     // additional check
     if (userRecord.accountStatus && userRecord.accountStatus === config.ACCOUNT_STATUSES.blocked) {
-      return basic(req, res, rs[403], 'ACCOUNT_IS_BLOCKED');
+      return basic(req, res, rs[403], sm.accountIsBlocked);
     }
 
     // find access image and password records
@@ -72,10 +72,10 @@ module.exports = async (req, res) => {
     const comparison = await bcrypt.compare(password, passwordRecord.hash);
     if (!comparison) {
       // brute force protection
-      const failedLoginAttempts = userRecord.failedLoginAttempts < 5
+      const failedLoginAttempts = userRecord.failedLoginAttempts < config.MAXIMUM_FAILED_LOGIN_ATTEMPTS
         ? userRecord.failedLoginAttempts + 1
-        : 5;
-      const accountStatus = failedLoginAttempts < 5
+        : config.MAXIMUM_FAILED_LOGIN_ATTEMPTS;
+      const accountStatus = failedLoginAttempts < config.MAXIMUM_FAILED_LOGIN_ATTEMPTS
         ? config.ACCOUNT_STATUSES.active
         : config.ACCOUNT_STATUSES.blocked;
       await db.User.updateOne(
@@ -111,7 +111,7 @@ module.exports = async (req, res) => {
     const refreshImage = await utils.generateImage(userRecord.id);
     const tokens = await utils.generateTokens(userRecord.id, accessImage, refreshImage);
 
-    // store refresh token in the database
+    // store refresh token in the database, update user record if necessary
     const RefreshToken = new db.RefreshToken({
       userId: userRecord.id,
       refreshImage,
@@ -120,7 +120,19 @@ module.exports = async (req, res) => {
       created: seconds,
       updated: seconds,
     });
-    await RefreshToken.save();
+    const promises = [RefreshToken.save()];
+    if (userRecord.failedLoginAttempts > 0) {
+      promises.push(db.User.updateOne(
+        {
+          _id: userRecord.id,
+        },
+        {
+          failedLoginAttempts: 0,
+          updated: seconds,
+        },
+      ));
+    }
+    await Promise.all(promises);
 
     return data(req, res, rs[200], sm.ok, { role: userRecord.role, tokens });
   } catch (error) {
