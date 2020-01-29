@@ -36,6 +36,7 @@ module.exports = async (req, res, next) => {
       }),
       db.User.findOne({
         _id: id,
+        accountStatus: config.ACCOUNT_STATUSES.active,
         isDeleted: false,
       }),
     ]);

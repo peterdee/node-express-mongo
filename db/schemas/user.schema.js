@@ -1,5 +1,11 @@
+const { ACCOUNT_STATUSES } = require('../../config');
+
 module.exports = ({ Schema }) => {
   const User = new Schema({
+    accountStatus: {
+      default: ACCOUNT_STATUSES.active,
+      type: String,
+    },
     email: String,
     emailIsVerified: {
       default: false,
