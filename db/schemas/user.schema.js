@@ -1,6 +1,14 @@
 module.exports = ({ Schema }) => {
   const User = new Schema({
     email: String,
+    emailIsVerified: {
+      default: false,
+      type: Boolean,
+    },
+    failedLoginAttempts: {
+      default: 0,
+      type: Number,
+    },
     firstName: String,
     lastName: String,
     role: {
