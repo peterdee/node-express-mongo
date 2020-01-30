@@ -17,7 +17,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * @api {post} /api/v1/login Login for a user
  * @apiSampleRequest http://localhost:2211/api/v1/login
  * @apiName LoginUser
- * @apiGroup Login
+ * @apiGroup LOGIN
  * @apiDescription This API allows user to get Access and Refresh tokens
  *
  * @apiParam {Object} data Data object, should contain { email, password }
