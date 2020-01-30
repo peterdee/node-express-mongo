@@ -1,13 +1,13 @@
 {
   "name": "node-express-mongo",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "private": true,
   "author": {
     "name": "Peter Dyumin",
     "url": "https://github.com/peterdee"
   },
   "description": "Node, Express, Mongo",
-  "homepage": "https://github.com/peterdee/node-exporess-mongo",
+  "homepage": "https://github.com/peterdee/node-express-mongo",
   "license": "ISC",
   "keywords": [
     "Express",
@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "dev": "nodemon ./bin/www",
+    "docs": "apidoc -i routes/ -o docs/",
     "lint": "eslint",
     "lint-staged": "lint-staged",
     "start": "node ./bin/www"
@@ -25,12 +26,12 @@
   },
   "pre-commit": "lint-staged",
   "engines": {
-    "node": "13.6.0",
-    "npm": "6.13.6"
+    "node": "13.7.0",
+    "npm": "6.13.7"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/peterdee/node-exporess-mongo"
+    "url": "git+https://github.com/peterdee/node-express-mongo"
   },
   "dependencies": {
     "bcrypt": "^3.0.7",

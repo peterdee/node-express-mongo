@@ -12,6 +12,111 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {Promise<void>}
+ *
+ * apiDoc:
+ * @api {post} /api/v1/login Login for a user
+ * @apiSampleRequest http://localhost:2211/api/v1/login
+ * @apiName LoginUser
+ * @apiGroup Login
+ * @apiDescription This API allows user to get Access and Refresh tokens
+ *
+ * @apiParam {Object} data Data object, should contain { email, password }
+ *
+ * @apiParamExample {json} data
+ * {
+ *   "email": "userEmail",
+ *   "password": "userPassword"
+ * }
+ *
+ * @apiSuccess (200) {Object} data Data object, contains tokens and user role
+ * @apiSuccess (200) {Number} datetime Response timestamp
+ * @apiSuccess (200) {String} info OK
+ * @apiSuccess (200) {String} misc NO_ADDITIONAL_INFORMATION
+ * @apiSuccess (200) {String} request /api/v1/login [POST]
+ * @apiSuccess (200) {Number} status 200
+ *
+ * @apiSuccessExample {json} OK
+ * {
+ *   "data": {
+ *     "role": "user",
+ *     "tokens": {
+ *       "access": "ACCESS_TOKEN",
+ *       "refresh": "REFRESH_TOKEN"
+ *     }
+ *   },
+ *   "datetime": 1570104879307,
+ *   "info": "OK",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/login [POST]",
+ *   "status": 200
+ * }
+ *
+ * @apiError (400) {Object} data Data object, contains array of missing or invalid fields
+ * @apiError (400) {Number} datetime Response timestamp
+ * @apiError (400) {String} info MISSING_DATA / INVALID_DATA
+ * @apiError (400) {String} misc NO_ADDITIONAL_INFORMATION
+ * @apiError (400) {String} request /api/v1/login [POST]
+ * @apiError (400) {Number} status 400
+ *
+ * @apiErrorExample {json} MISSING_DATA
+ * {
+ *   "data": {
+ *     "missing": [
+ *       "email",
+ *       "password"
+ *     ]
+ *   },
+ *   "datetime": 1570095138268,
+ *   "info": "MISSING_DATA",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/login [POST]",
+ *   "status": 400
+ * }
+ *
+ * @apiErrorExample {json} INVALID_DATA
+ * {
+ *   "data": {
+ *     "invalid": [
+ *       "email",
+ *       "password"
+ *     ]
+ *   },
+ *   "datetime": 1570095578293,
+ *   "info": "INVALID_DATA",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/login [POST]",
+ *   "status": 400
+ * }
+ *
+ * @apiError (401) {Number} datetime Response timestamp
+ * @apiError (401) {String} info ACCESS_DENIED
+ * @apiError (401) {String} misc NO_ADDITIONAL_INFORMATION
+ * @apiError (401) {String} request /api/v1/login [POST]
+ * @apiError (401) {Number} status 401
+ *
+ * @apiErrorExample {json} ACCESS_DENIED
+ * {
+ *   "datetime": 1570095578293,
+ *   "info": "ACCESS_DENIED",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/login [POST]",
+ *   "status": 401
+ * }
+ *
+ * @apiError (403) {Number} datetime Response timestamp
+ * @apiError (403) {String} info ACCOUNT_IS_BLOCKED
+ * @apiError (403) {String} misc NO_ADDITIONAL_INFORMATION
+ * @apiError (403) {String} request /api/v1/allocations [POST]
+ * @apiError (403) {Number} status 403
+ *
+ * @apiErrorExample {json} ACCOUNT_IS_BLOCKED
+ * {
+ *   "datetime": 1570095578293,
+ *   "info": "ACCOUNT_IS_BLOCKED",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/login [POST]",
+ *   "status": 403
+ * }
  */
 module.exports = async (req, res) => {
   try {

@@ -40,6 +40,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// serve static documentation
+if (config.ENV === config.ENVS.dev) {
+  app.use(express.static(path.join(__dirname, 'docs')));
+}
+
 app.use('/', index);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.accountRecovery}`, accountRecovery);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changePassword}`, changePassword);
