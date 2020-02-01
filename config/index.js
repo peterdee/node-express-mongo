@@ -80,6 +80,7 @@ const SERVER_MESSAGES = {
   accountIsBlocked: 'ACCOUNT_IS_BLOCKED',
   accessDenied: 'ACCESS_DENIED',
   emailAlreadyInUse: 'EMAIL_ALREADY_IN_USE',
+  emailAlreadyVerified: 'EMAIL_ALREADY_VERIFIED',
   expiredRecoveryCode: 'EXPIRED_RECOVERY_CODE',
   internalServerError: 'INTERNAL_SERVER_ERROR',
   invalidData: 'INVALID_DATA',
