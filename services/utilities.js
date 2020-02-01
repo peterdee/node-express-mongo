@@ -19,7 +19,7 @@ const checkData = (fields = [], source = {}) => fields.reduce((arr, item) => {
 /**
  * Generate random alpha-numeric string
  * @param length {number} - string length
- * @return {string|string}
+ * @return {string}
  */
 const generateString = (length = 16) => {
   const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -69,14 +69,14 @@ const isNumber = (value) => !Number.isNaN(Number(value));
  * Show console log
  * @param text {string} - string to log
  * @param data {*} - additional data to log
- * @returns {*}
+ * @returns {void}
  */
 const log = (text = '', data = null) => ENV === ENVS.dev && console.log(`${text}`, data || '');
 
 /**
  * Validate array of the provided values: check data types
  * @param items {object[]} - array of objects to validate
- * @returns {*}
+ * @returns {string[]}
  */
 const validateData = (items = []) => items.reduce((arr, { field = '', type = '', value }) => {
   /* eslint-disable */

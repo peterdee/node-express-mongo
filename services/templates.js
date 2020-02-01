@@ -2,10 +2,10 @@ const { ENV, SERVER_NAME, SERVER_MESSAGES: sm } = require('../config');
 
 module.exports = {
     /**
-   * Create a password recovery template
+   * Create an account recovery template
    * @param recoveryLink {string} - recovery link
    * @param userName {string} - user name
-   * @return {object}
+   * @returns {{ subject: string, template: string }}
    */
   createAccountRecoveryTemplate: (recoveryLink = '', userName = '') => ({
     subject: `${SERVER_NAME}: Account Recovery`,
@@ -21,7 +21,9 @@ module.exports = {
     <b>Your Account Recovery link:</b>
   </div>
   <br>
-  <div><a href="${recoveryLink}">${recoveryLink}</a></div>
+  <div>
+    <a href="${recoveryLink}">${recoveryLink}</a>
+  </div>
   <br>
 </div>
     `,
@@ -29,7 +31,7 @@ module.exports = {
     /**
    * Create an internal error template
    * @param error {string|*} - error to be sent
-   * @return {object}
+   * @returns {{ subject: string, template: string }}
    */
   createInternalErrorTemplate: (error) => ({
     subject: `${SERVER_NAME}: ${sm.internalServerError.split('_').join(' ').toUpperCase()} [${ENV.toUpperCase()}]`,
@@ -59,7 +61,7 @@ module.exports = {
    * Create a password recovery template
    * @param recoveryLink {string} - recovery link
    * @param userName {string} - user name
-   * @return {object}
+   * @return {{ subject: string, template: string }}
    */
   createPasswordRecoveryTemplate: (recoveryLink = '', userName = '') => ({
     subject: `${SERVER_NAME}: Password Recovery`,
@@ -85,7 +87,7 @@ module.exports = {
    * @param error {string|*} - error to be sent
    * @param func {string} - function name
    * @param misc {string} - additional information
-   * @return {object}
+   * @return {{ subject: string, template: string }}
    */
   createSpecialErrorTemplate: (error, func = '', misc = sm.noAdditionalInformation) => ({
     subject: `${SERVER_NAME}: SPECIAL SERVER ERROR [${ENV.toUpperCase()}]`,
