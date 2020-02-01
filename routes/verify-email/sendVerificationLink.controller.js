@@ -34,9 +34,29 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  *   "request": "/api/v1/verify-email [GET]",
  *   "status": 200
  * }
+ * 
+ * @apiError (400) {Number} datetime Response timestamp
+ * @apiError (400) {String} info EMAIL_ALREADY_VERIFIED
+ * @apiError (400) {String} misc NO_ADDITIONAL_INFORMATION
+ * @apiError (400) {String} request /api/v1/verify-email [GET]
+ * @apiError (400) {Number} status 400
+ *
+ * @apiErrorExample {json} EMAIL_ALREADY_VERIFIED
+ * {
+ *   "datetime": 1570095578293,
+ *   "info": "EMAIL_ALREADY_VERIFIED",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/verify-email [GET]",
+ *   "status": 400
+ * }
  */
 module.exports = async (req, res) => {
   try {
+    // make sure that user's email is not verified
+    if (req.user.emailIsVerified) {
+      return basic(req, res, rs[400], sm.emailAlreadyVerified);
+    }
+
     // invalidate all of the previously sent codes
     const seconds = getSeconds();
     await db.EmailVerificationCode.updateMany(
@@ -63,8 +83,8 @@ module.exports = async (req, res) => {
 
 
     // send an email
-    const recoveryLink = `${config.FRONTEND_URL}/verify-email/${code}`;
-    const { subject, template } = createEmailVerificationTemplate(recoveryLink, req.user.fullName);
+    const link = `${config.FRONTEND_URL}/verify-email/${code}`;
+    const { subject, template } = createEmailVerificationTemplate(link, req.user.fullName);
     mailer(req.user.email, subject, template);
 
     return basic(req, res, rs[200], sm.ok);
