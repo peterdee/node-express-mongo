@@ -20,6 +20,7 @@ const logout = require('./routes/logout');
 const passwordRecovery = require('./routes/password-recovery');
 const refreshTokens = require('./routes/refresh-tokens');
 const registration = require('./routes/registration');
+const verifyEmail = require('./routes/verify-email');
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.logout}`, logout);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.passwordRecovery}`, passwordRecovery);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.refreshTokens}`, refreshTokens);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.registration}`, registration);
+app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.verifyEmail}`, verifyEmail);
 
 // handle non-existing routes
 app.all('*', (req, res) => basic(req, res, rs[404], sm.resourceNotFound));

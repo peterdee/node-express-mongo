@@ -15,6 +15,7 @@ const APIS = {
     passwordRecovery: 'password-recovery',
     refreshTokens: 'refresh-tokens',
     registration: 'registration',
+    verifyEmail: 'verify-email',
   },
   prefix: 'api',
   version: 'v1',
