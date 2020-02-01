@@ -47,6 +47,7 @@ module.exports = async (req, res, next) => {
     // continue
     req.id = userRecord.id;
     req.role = userRecord.role;
+    req.user = userRecord;
     return next();
   } catch (err) {
     // check for expiration error
