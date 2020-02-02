@@ -7,7 +7,7 @@ const { getSeconds, log } = require('../services/utilities');
 /**
  * Do the database seeding if necessary
  * @param database {object} - database connection
- * @returns {Promise}
+ * @returns {Promise<boolean|void>}
  */
 module.exports = async (database) => {
   if (!isMaster) {

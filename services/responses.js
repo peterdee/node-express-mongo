@@ -1,5 +1,5 @@
 const config = require('../config');
-const { createInternalErrorTemplate } = require('./templates');
+const { createInternalErrorTemplate, createSpecialErrorTemplate } = require('./templates');
 const { log } = require('./utilities');
 const sendEmail = require('./mailer');
 const stringify = require('./stringify');
@@ -15,9 +15,15 @@ module.exports = {
    * @param status {number} - status of the response
    * @param info {string} - response info
    * @param misc {string} - additional response info (not required)
-   * @returns {*|void|boolean}
+   * @returns {void}
    */
-  basic: (req, res, status, info, misc = sm.noAdditionalInformation) => res.status(status).send({
+  basic: (
+    req,
+    res,
+    status = rs[200],
+    info = '',
+    misc = sm.noAdditionalInformation,
+  ) => res.status(status).send({
     datetime: Date.now(),
     info,
     misc,
@@ -32,9 +38,16 @@ module.exports = {
    * @param info {string} - response info
    * @param data {*} - response data
    * @param misc {string} - additional response info (not required)
-   * @returns {*|void|boolean}
+   * @returns {void}
    */
-  data: (req, res, status, info, data, misc = sm.noAdditionalInformation) => res.status(status).send({
+  data: (
+    req,
+    res,
+    status = rs[200],
+    info = '',
+    data,
+    misc = sm.noAdditionalInformation,
+  ) => res.status(status).send({
     data,
     datetime: Date.now(),
     info,
@@ -48,12 +61,12 @@ module.exports = {
    * @param res {object} - response object
    * @param error {object|string|*} - error object or string
    * @param misc {string} - additional response info (not required)
-   * @return {*}
+   * @return {void}
    */
   internalError: (req, res, error, misc = sm.noAdditionalInformation) => {
     // send an email with a stringified error
-    const { message, subject } = createInternalErrorTemplate(stringify(error));
-    sendEmail(config.MAIL_SERVICE.email, subject, message);
+    const { subject, template } = createInternalErrorTemplate(stringify(error));
+    sendEmail(config.MAIL_SERVICE.email, subject, template);
 
     // dump the log into the console
     log('-- INTERNAL SERVER ERROR:\n', error);
@@ -70,14 +83,15 @@ module.exports = {
    * Send an email about a special server error
    * @param error {object|string|*} - error object or string
    * @param func {string} - name of the function that produced an error
-   * @return {*}
+   * @param misc {string} - additional information
+   * @returns {void}
    */
-  specialError: (error, func = '') => {
+  specialError: (error, func = '', misc = sm.noAdditionalInformation) => {
     // dump the log into the console
     log(`-- SPECIAL SERVER ERROR @ ${func}:\n`, error);
 
     // send an email with a stringified error and function name
-    const { message, subject } = createSpecialErrorTemplate(stringify(error), func);
-    return sendEmail(config.MAIL_SERVICE.email, subject, message);
+    const { subject, template } = createSpecialErrorTemplate(stringify(error), func, misc);
+    return sendEmail(config.MAIL_SERVICE.email, subject, template);
   },
 };
