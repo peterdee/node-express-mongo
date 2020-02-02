@@ -49,11 +49,11 @@ const DATABASE = {
 };
 // application environment
 const { APP_ENV: ENV = ENVS.dev } = ev;
-const FRONTEND_URL = ev.APP_FRONTEND_URL || 'http://localhost:1122';
+const FRONTEND_URL = ev.APP_FRONTEND_URL || 'http://localhost:5000';
 // mailing service via nodemailer
 const MAIL_SERVICE = {
-  email: ev.MAIL_SERVICE_EMAIL,
-  password: ev.MAIL_SERVICE_PASSWORD,
+  email: ev.MAIL_SERVICE_EMAIL || '',
+  password: ev.MAIL_SERVICE_PASSWORD || '',
   service: 'gmail',
 };
 // maximum value of the failed login attempts
