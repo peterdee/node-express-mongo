@@ -9,6 +9,7 @@ const ACCOUNT_STATUSES = {
 const APIS = {
   paths: {
     accountRecovery: 'account-recovery',
+    changeEmail: 'change-email',
     changePassword: 'change-password',
     login: 'login',
     logout: 'logout',
