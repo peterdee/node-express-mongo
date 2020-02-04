@@ -106,7 +106,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * @apiError (403) {Number} datetime Response timestamp
  * @apiError (403) {String} info ACCOUNT_IS_BLOCKED
  * @apiError (403) {String} misc NO_ADDITIONAL_INFORMATION
- * @apiError (403) {String} request /api/v1/allocations [POST]
+ * @apiError (403) {String} request /api/v1/login [POST]
  * @apiError (403) {Number} status 403
  *
  * @apiErrorExample {json} ACCOUNT_IS_BLOCKED

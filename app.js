@@ -12,6 +12,7 @@ const config = require('./config');
 
 const { APIS, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 
+const account = require('./routes/account');
 const accountRecovery = require('./routes/account-recovery');
 const changeEmail = require('./routes/change-email');
 const changePassword = require('./routes/change-password');
@@ -48,6 +49,7 @@ if (config.ENV === config.ENVS.dev) {
 }
 
 app.use('/', index);
+app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.account}`, account);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.accountRecovery}`, accountRecovery);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changeEmail}`, changeEmail);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changePassword}`, changePassword);

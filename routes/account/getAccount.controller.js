@@ -14,6 +14,14 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * @apiGroup ACCOUNT
  * @apiDescription This API allows user to get his / her own account
  *
+ * @apiHeader {String} X-Access-Token Access token
+ *
+ * @apiHeaderExample {json} Request-Example:
+ * {
+ *   "X-Access-Token": "accessToken"
+ * }
+ * 
+ * @apiSuccess (200) {Object} data Data object, contains user account data
  * @apiSuccess (200) {Number} datetime Response timestamp
  * @apiSuccess (200) {String} info OK
  * @apiSuccess (200) {String} misc NO_ADDITIONAL_INFORMATION
