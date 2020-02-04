@@ -8,6 +8,7 @@ const ACCOUNT_STATUSES = {
 // API properties
 const APIS = {
   paths: {
+    account: 'account',
     accountRecovery: 'account-recovery',
     changeEmail: 'change-email',
     changePassword: 'change-password',
