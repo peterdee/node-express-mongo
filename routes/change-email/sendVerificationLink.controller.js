@@ -12,6 +12,85 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {Promise<void>}
+ *
+ * apiDoc:
+ * @api {post} /api/v1/change-email/send-link Send verification link to the new email address
+ * @apiSampleRequest http://localhost:2211/api/v1/change-email/send-link
+ * @apiName ChangeEmailSendLink
+ * @apiGroup CHANGE-EMAIL
+ * @apiDescription This API allows user to receive a verification link on a new email address
+ *
+ * @apiParam {Object} data Data object, should contain { email }
+ *
+ * @apiParamExample {json} data
+ * {
+ *   "email": "userEmailAddress"
+ * }
+ *
+ * @apiSuccess (200) {Number} datetime Response timestamp
+ * @apiSuccess (200) {String} info OK
+ * @apiSuccess (200) {String} misc NO_ADDITIONAL_INFORMATION
+ * @apiSuccess (200) {String} request /api/v1/change-email/send-link [POST]
+ * @apiSuccess (200) {Number} status 200
+ *
+ * @apiSuccessExample {json} OK
+ * {
+ *   "datetime": 1570104879307,
+ *   "info": "OK",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/change-email/send-link [POST]",
+ *   "status": 200
+ * }
+ *
+ * @apiError (400) {Object} data Data object, contains array of missing or invalid fields
+ * @apiError (400) {Number} datetime Response timestamp
+ * @apiError (400) {String} info MISSING_DATA / INVALID_DATA
+ * @apiError (400) {String} misc NO_ADDITIONAL_INFORMATION
+ * @apiError (400) {String} request /api/v1/change-email/send-link [POST]
+ * @apiError (400) {Number} status 400
+ *
+ * @apiErrorExample {json} MISSING_DATA
+ * {
+ *   "data": {
+ *     "missing": [
+ *       "email"
+ *     ]
+ *   },
+ *   "datetime": 1570095138268,
+ *   "info": "MISSING_DATA",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/change-email/send-link [POST]",
+ *   "status": 400
+ * }
+ *
+ * @apiErrorExample {json} INVALID_DATA
+ * {
+ *   "data": {
+ *     "invalid": [
+ *       "email"
+ *     ]
+ *   },
+ *   "datetime": 1570095578293,
+ *   "info": "INVALID_DATA",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/change-email/send-link [POST]",
+ *   "status": 400
+ * }
+ *
+ * @apiError (403) {Number} datetime Response timestamp
+ * @apiError (403) {String} info EMAIL_ALREADY_IN_USE
+ * @apiError (403) {String} misc NO_ADDITIONAL_INFORMATION
+ * @apiError (403) {String} request /api/v1/change-email/send-link [POST]
+ * @apiError (403) {Number} status 403
+ *
+ * @apiErrorExample {json} EMAIL_ALREADY_IN_USE
+ * {
+ *   "datetime": 1570095578293,
+ *   "info": "EMAIL_ALREADY_IN_USE",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/change-email/send-link [POST]",
+ *   "status": 403
+ * }
  */
 module.exports = async (req, res) => {
   try {
@@ -40,33 +119,42 @@ module.exports = async (req, res) => {
     }
 
     // find all of the existing UserEmail records
-    // const previousUserEmails = await db.UserEmail.find({
-    //   userId: req.id,
-    //   isDeleted: false,
-    // });
+    const previousUserEmails = await db.UserEmail.find({
+      userId: req.id,
+      isDeleted: false,
+    });
 
     // get Email Verification Code IDs
-    // const emailVerificationCodeIDs = previousUserEmails.map(({
-    //   emailVerificationCodeId,
-    // }) => emailVerificationCodeId);
+    const codeIds = previousUserEmails.map(({ emailVerificationCodeId }) => emailVerificationCodeId);
 
-    // invalidate all of the existing User Email records and all of the related Email Verification Code records
-    // await Promise.all([
-    //   db.EmailVerificationCode.updateMany(
-    //     {
-    //       _id: {
-    //         $in: emailVerificationCodeIDs,
-    //       },
-    //     },
-    //     {
-    //
-    //     }
-    //   )
-    // ]);
+    // invalidate all of the related Email Verification Code records & all of the existing User Email records
+    const seconds = utils.getSeconds();
+    await Promise.all([
+      db.EmailVerificationCode.updateMany(
+        {
+          _id: {
+            $in: codeIds,
+          },
+        },
+        {
+          isDeleted: true,
+          updated: seconds,
+        },
+      ),
+      db.UserEmail.updateMany(
+        {
+          userId: req.id,
+          isDeleted: false,
+        },
+        {
+          isDeleted: true,
+          updated: seconds,
+        },
+      ),
+    ]);
 
     // create new Email Verification Code Record
     const code = utils.generateString(32);
-    const seconds = utils.getSeconds();
     const EmailVerificationCode = new db.EmailVerificationCode({
       userId: req.id,
       code,

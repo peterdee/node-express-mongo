@@ -10,7 +10,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {Promise<void>}
- * 
+ *
  * apiDoc:
  * @api {post} /api/v1/verify-email Verify the email verification code
  * @apiSampleRequest http://localhost:2211/api/v1/verify-email
@@ -89,7 +89,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  *   "request": "/api/v1/verify-email [POST]",
  *   "status": 401
  * }
- * 
+ *
  * @apiError (403) {Number} datetime Response timestamp
  * @apiError (403) {String} info EMAIL_ALREADY_VERIFIED / EXPIRED_RECOVERY_CODE / INVALID_RECOVERY_CODE
  * @apiError (403) {String} misc NO_ADDITIONAL_INFORMATION
@@ -104,7 +104,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  *   "request": "/api/v1/verify-email [POST]",
  *   "status": 403
  * }
- * 
+ *
  * @apiErrorExample {json} EXPIRED_RECOVERY_CODE
  * {
  *   "datetime": 1570095578293,
@@ -113,7 +113,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  *   "request": "/api/v1/verify-email [POST]",
  *   "status": 403
  * }
- * 
+ *
  * @apiErrorExample {json} INVALID_RECOVERY_CODE
  * {
  *   "datetime": 1570095578293,
@@ -177,7 +177,7 @@ module.exports = async (req, res) => {
         {
           _id: userRecord.id,
         },
-        { 
+        {
           emailIsVerified: true,
           updated: seconds,
         },
