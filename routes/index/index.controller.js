@@ -6,7 +6,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {*}
- * 
+ *
  * apiDoc:
  * @api {get} / Backend index
  * @apiSampleRequest http://localhost:2211/
