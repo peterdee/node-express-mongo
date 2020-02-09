@@ -5,6 +5,6 @@ const changePassword = require('./changePassword.controller');
 
 const router = express.Router();
 
-router.post('/', authenticate, changePassword);
+router.patch('/', authenticate, changePassword);
 
 module.exports = router;

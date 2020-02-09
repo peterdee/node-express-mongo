@@ -2,12 +2,13 @@ const { ACCOUNT_STATUSES } = require('../../config');
 
 module.exports = ({ Schema }) => {
   const User = new Schema({
-    avatarLink: {
-      default: null,
-      type: String,
-    },
+    about: String,
     accountStatus: {
       default: ACCOUNT_STATUSES.active,
+      type: String,
+    },
+    avatarLink: {
+      default: null,
       type: String,
     },
     email: String,
