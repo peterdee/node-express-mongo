@@ -10,6 +10,7 @@ const APIS = {
   paths: {
     account: 'account',
     accountRecovery: 'account-recovery',
+    avatar: 'avatar',
     changeEmail: 'change-email',
     changePassword: 'change-password',
     image: 'image',
