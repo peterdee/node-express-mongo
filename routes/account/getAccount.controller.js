@@ -31,6 +31,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * @apiSuccessExample {json} OK
  * {
  *   "data": {
+ *     "about": "about",
  *     "avatarLink": "avatarLink",
  *     "created": "created",
  *     "email": "email",
@@ -47,6 +48,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * }
  */
 module.exports = (req, res) => data(req, res, rs[200], sm.ok, {
+  about: req.user.about || '',
   avatarLink: req.user.avatarLink || '',
   created: req.user.created,
   email: req.user.email,
