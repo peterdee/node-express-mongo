@@ -4,6 +4,6 @@ const image = require('./image.controller');
 
 const router = express.Router();
 
-router.all('/:name', image);
+router.get('/:name', image);
 
 module.exports = router;

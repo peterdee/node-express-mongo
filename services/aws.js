@@ -40,4 +40,11 @@ module.exports = {
       return internalError(req, res, error);
     }
   },
+  /**
+   * Upload the file to the Cellar strage
+   * @param Body {*} - file data
+   * @param Key {string} - file name
+   * @returns {Promise<void>}
+   */
+  uploadFile: (Body, Key = '') => S3.putObject({ Body, Bucket, Key }).promise(),
 };

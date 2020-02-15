@@ -14,6 +14,7 @@ const { APIS, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 
 const account = require('./routes/account');
 const accountRecovery = require('./routes/account-recovery');
+const avatar = require('./routes/avatar');
 const changeEmail = require('./routes/change-email');
 const changePassword = require('./routes/change-password');
 const image = require('./routes/image');
@@ -52,6 +53,7 @@ if (config.ENV === config.ENVS.dev) {
 app.use('/', index);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.account}`, account);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.accountRecovery}`, accountRecovery);
+app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.avatar}`, avatar);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changeEmail}`, changeEmail);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changePassword}`, changePassword);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.image}`, image);
