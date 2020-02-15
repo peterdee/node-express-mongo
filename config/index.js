@@ -12,6 +12,7 @@ const APIS = {
     accountRecovery: 'account-recovery',
     changeEmail: 'change-email',
     changePassword: 'change-password',
+    image: 'image',
     login: 'login',
     logout: 'logout',
     passwordRecovery: 'password-recovery',
@@ -24,6 +25,7 @@ const APIS = {
 };
 // Clever Cloud Cellar
 const CELLAR = {
+  BUCKET: ev.CELLAR_BUCKET,
   HOST: ev.CELLAR_HOST,
   KEY_ID: ev.CELLAR_KEY_ID,
   KEY_SECRET: ev.CELLAR_KEY_SECRET,
