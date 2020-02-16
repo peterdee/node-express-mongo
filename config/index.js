@@ -25,7 +25,7 @@ const APIS = {
   version: 'v1',
 };
 // backend URL
-const { BACKEND_URL = `http://localhost:${Number(ev.APP_PORT) || 2211}` }  = ev;
+const { APP_BACKEND_URL: BACKEND_URL = `http://localhost:${Number(ev.APP_PORT) || 2211}` }  = ev;
 // available data types for the data validation function
 const DATA_TYPES = {
   array: 'array',
