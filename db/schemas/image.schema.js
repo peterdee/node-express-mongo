@@ -1,6 +1,7 @@
 module.exports = ({ Schema }) => new Schema({
   data: String,
   mimeType: String,
+  uid: String,
   isDeleted: {
     default: false,
     type: Boolean,

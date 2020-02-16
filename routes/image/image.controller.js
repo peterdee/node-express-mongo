@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
     
     // load the Image record
     const image = await db.Image.findOne({
-      _id: id,
+      uid: id,
       isDeleted: false,
     });
     if (!image) {
