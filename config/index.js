@@ -24,13 +24,8 @@ const APIS = {
   prefix: 'api',
   version: 'v1',
 };
-// Clever Cloud Cellar
-const CELLAR = {
-  BUCKET: ev.CELLAR_BUCKET,
-  HOST: ev.CELLAR_HOST,
-  KEY_ID: ev.CELLAR_KEY_ID,
-  KEY_SECRET: ev.CELLAR_KEY_SECRET,
-};
+// backend URL
+const { BACKEND_URL = `http://localhost:${Number(ev.APP_PORT) || 2211}` }  = ev;
 // available data types for the data validation function
 const DATA_TYPES = {
   array: 'array',
@@ -129,7 +124,7 @@ const USER = {
 module.exports = {
   ACCOUNT_STATUSES,
   APIS,
-  CELLAR,
+  BACKEND_URL,
   DATA_TYPES,
   DATABASE,
   ENV,
