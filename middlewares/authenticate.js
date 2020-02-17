@@ -44,6 +44,12 @@ module.exports = async (req, res, next) => {
       return basic(req, res, rs[401], sm.accessDenied);
     }
 
+    // compare Access Image
+    const { image = '' } = accessImageRecord;
+    if (!(image && image === accessImage)) {
+      return basic(req, res, rs[401], sm.invalidToken);
+    }
+
     // continue
     req.id = userRecord.id;
     req.role = userRecord.role;
