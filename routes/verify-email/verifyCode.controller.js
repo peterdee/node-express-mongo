@@ -91,7 +91,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * }
  *
  * @apiError (403) {Number} datetime Response timestamp
- * @apiError (403) {String} info EMAIL_ALREADY_VERIFIED / EXPIRED_RECOVERY_CODE / INVALID_RECOVERY_CODE
+ * @apiError (403) {String} info EMAIL_ALREADY_VERIFIED / EXPIRED_VERIFICATION_CODE / INVALID_VERIFICATION_CODE
  * @apiError (403) {String} misc NO_ADDITIONAL_INFORMATION
  * @apiError (403) {String} request /api/v1/verify-email [POST]
  * @apiError (403) {Number} status 403
@@ -105,19 +105,19 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  *   "status": 403
  * }
  *
- * @apiErrorExample {json} EXPIRED_RECOVERY_CODE
+ * @apiErrorExample {json} EXPIRED_VERIFICATION_CODE
  * {
  *   "datetime": 1570095578293,
- *   "info": "EXPIRED_RECOVERY_CODE",
+ *   "info": "EXPIRED_VERIFICATION_CODE",
  *   "misc": "NO_ADDITIONAL_INFORMATION",
  *   "request": "/api/v1/verify-email [POST]",
  *   "status": 403
  * }
  *
- * @apiErrorExample {json} INVALID_RECOVERY_CODE
+ * @apiErrorExample {json} INVALID_VERIFICATION_CODE
  * {
  *   "datetime": 1570095578293,
- *   "info": "INVALID_RECOVERY_CODE",
+ *   "info": "INVALID_VERIFICATION_CODE",
  *   "misc": "NO_ADDITIONAL_INFORMATION",
  *   "request": "/api/v1/verify-email [POST]",
  *   "status": 403
@@ -143,10 +143,10 @@ module.exports = async (req, res) => {
       isDeleted: false,
     });
     if (!emailVerificationCodeRecord) {
-      return basic(req, res, rs[403], sm.invalidRecoveryCode);
+      return basic(req, res, rs[403], sm.invalidVerificationCode);
     }
     if (emailVerificationCodeRecord.expirationDate < utils.getSeconds()) {
-      return basic(req, res, rs[403], sm.expiredRecoveryCode);
+      return basic(req, res, rs[403], sm.expiredVerificationCode);
     }
 
     // load User Record

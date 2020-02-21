@@ -20,6 +20,13 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * @apiGroup VERIFY-EMAIL
  * @apiDescription This API allows user to send an email verification link after the registration
  *
+ * @apiHeader {String} X-Access-Token Access token
+ *
+ * @apiHeaderExample {json} Request-Example:
+ * {
+ *   "X-Access-Token": "accessToken"
+ * }
+ *
  * @apiSuccess (200) {Number} datetime Response timestamp
  * @apiSuccess (200) {String} info OK
  * @apiSuccess (200) {String} misc NO_ADDITIONAL_INFORMATION
@@ -34,7 +41,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  *   "request": "/api/v1/verify-email [GET]",
  *   "status": 200
  * }
- * 
+ *
  * @apiError (400) {Number} datetime Response timestamp
  * @apiError (400) {String} info EMAIL_ALREADY_VERIFIED
  * @apiError (400) {String} misc NO_ADDITIONAL_INFORMATION
@@ -80,7 +87,6 @@ module.exports = async (req, res) => {
       updated: seconds,
     });
     await EmailVerificationCode.save();
-
 
     // send an email
     const link = `${config.FRONTEND_URL}/verify-email/${code}`;
