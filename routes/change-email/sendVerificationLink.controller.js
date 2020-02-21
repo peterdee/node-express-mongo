@@ -20,6 +20,13 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * @apiGroup CHANGE-EMAIL
  * @apiDescription This API allows user to receive a verification link on a new email address
  *
+ * @apiHeader {String} X-Access-Token Access token
+ *
+ * @apiHeaderExample {json} Request-Example:
+ * {
+ *   "X-Access-Token": "accessToken"
+ * }
+ *
  * @apiParam {Object} data Data object, should contain { email }
  *
  * @apiParamExample {json} data

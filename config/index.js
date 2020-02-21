@@ -25,7 +25,7 @@ const APIS = {
   version: 'v1',
 };
 // backend URL
-const { APP_BACKEND_URL: BACKEND_URL = `http://localhost:${Number(ev.APP_PORT) || 2211}` }  = ev;
+const { APP_BACKEND_URL: BACKEND_URL = `http://localhost:${Number(ev.APP_PORT) || 2211}` } = ev;
 // available data types for the data validation function
 const DATA_TYPES = {
   array: 'array',
@@ -88,10 +88,12 @@ const SERVER_MESSAGES = {
   emailAlreadyInUse: 'EMAIL_ALREADY_IN_USE',
   emailAlreadyVerified: 'EMAIL_ALREADY_VERIFIED',
   expiredRecoveryCode: 'EXPIRED_RECOVERY_CODE',
+  expiredVerificationCode: 'EXPIRED_VERIFICATION_CODE',
   internalServerError: 'INTERNAL_SERVER_ERROR',
   invalidData: 'INVALID_DATA',
   invalidRecoveryCode: 'INVALID_RECOVERY_CODE',
   invalidToken: 'INVALID_TOKEN',
+  invalidVerificationCode: 'INVALID_VERIFICATION_CODE',
   missingData: 'MISSING_DATA',
   missingToken: 'MISSING_TOKEN',
   noAdditionalInformation: 'NO_ADDITIONAL_INFORMATION',
