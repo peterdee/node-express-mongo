@@ -113,11 +113,26 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  *   "request": "/api/v1/change-email/verify-code [POST]",
  *   "status": 403
  * }
+ * 
+ * @apiError (404) {Number} datetime Response timestamp
+ * @apiError (404) {String} info EMAIL_RECORD_NOT_FOUND
+ * @apiError (404) {String} misc NO_ADDITIONAL_INFORMATION
+ * @apiError (404) {String} request /api/v1/change-email/verify-code [POST]
+ * @apiError (404) {Number} status 404
+ *
+ * @apiErrorExample {json} EMAIL_RECORD_NOT_FOUND
+ * {
+ *   "datetime": 1570095578293,
+ *   "info": "EMAIL_RECORD_NOT_FOUND",
+ *   "misc": "NO_ADDITIONAL_INFORMATION",
+ *   "request": "/api/v1/change-email/verify-code [POST]",
+ *   "status": 404
+ * }
  */
 module.exports = async (req, res) => {
   try {
     // check and validate data
-    const { code = '' } = req.body;
+    const { body: { code = '' } = {} } = req;
     const expected = [{ field: 'code', type: DATA_TYPES.string, value: code }];
     const missing = utils.checkData(expected.map(({ field }) => field), req.body);
     if (missing.length > 0) {
@@ -140,13 +155,22 @@ module.exports = async (req, res) => {
       return basic(req, res, rs[403], sm.expiredVerificationCode);
     }
 
-    // load User Record
-    const userRecord = await db.User.findOne({
-      _id: emailVerificationCodeRecord.userId,
-      isDeleted: false,
-    });
+    // load User Record and User Email record
+    const [userRecord, userEmailRecord] = await Promise.all([
+      db.User.findOne({
+        _id: emailVerificationCodeRecord.userId,
+        isDeleted: false,
+      }),
+      db.UserEmail.findOne({
+        emailVerificationCodeId: emailVerificationCodeRecord.id,
+        isDeleted: false,
+      }),
+    ]);
     if (!userRecord) {
       return basic(req, res, rs[401], sm.accessDenied);
+    }
+    if (!userEmailRecord) {
+      return basic(req, res, rs[404], 'EMAIL_RECORD_NOT_FOUND');
     }
 
     // update records
@@ -166,7 +190,7 @@ module.exports = async (req, res) => {
           _id: userRecord.id,
         },
         {
-          email: emailVerificationCodeRecord.newEmail,
+          email: userEmailRecord.newEmail,
           emailIsVerified: true,
           updated: seconds,
         },
