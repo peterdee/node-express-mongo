@@ -102,7 +102,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 module.exports = async (req, res) => {
   try {
     // check and validate data
-    const { email } = req.body;
+    const { body: { email = '' } = {} } = req;
     const expected = [{ field: 'email', type: DATA_TYPES.string, value: email }];
     const missing = utils.checkData(expected.map(({ field }) => field), req.body);
     if (missing.length > 0) {
