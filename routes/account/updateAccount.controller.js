@@ -23,15 +23,15 @@ const utils = require('../../services/utilities');
  *   "X-Access-Token": "accessToken"
  * }
  * 
- * @apiParam {Object} data Data object, should contain { firstName, lastName }
+ * @apiParam {Object} data Data object, should contain { about, firstName, lastName }
  *
  * @apiParamExample {json} data
  * {
+ *   "about": "about",
  *   "firstName": "firstName",
  *   "lastName": "lastName"
  * }
  * 
- * @apiSuccess (200) {Object} data Data object, contains user account data
  * @apiSuccess (200) {Number} datetime Response timestamp
  * @apiSuccess (200) {String} info OK
  * @apiSuccess (200) {String} misc NO_ADDITIONAL_INFORMATION
@@ -40,15 +40,6 @@ const utils = require('../../services/utilities');
  *
  * @apiSuccessExample {json} OK
  * {
- *   "data": {
- *     "avatarLink": "avatarLink",
- *     "created": "created",
- *     "email": "email",
- *     "emailIsVerified": "emailIsVerified",
- *     "firstName": "firstName",
- *     "lastName": "lastName",
- *     "role": "role",
- *   },
  *   "datetime": 1570104879307,
  *   "info": "OK",
  *   "misc": "NO_ADDITIONAL_INFORMATION",
@@ -67,6 +58,7 @@ const utils = require('../../services/utilities');
  * {
  *   "data": {
  *     "missing": [
+ *       "about",
  *       "firstName",
  *       "lastName"
  *     ]
@@ -82,6 +74,7 @@ const utils = require('../../services/utilities');
  * {
  *   "data": {
  *     "invalid": [
+ *       "about",
  *       "firstName",
  *       "lastName"
  *     ]
@@ -92,26 +85,11 @@ const utils = require('../../services/utilities');
  *   "request": "/api/v1/account [PATCH]",
  *   "status": 400
  * }
- * 
- * @apiError (403) {Number} datetime Response timestamp
- * @apiError (403) {String} info FAILED_TO_LOAD_ACCOUNT
- * @apiError (403) {String} misc NO_ADDITIONAL_INFORMATION
- * @apiError (403) {String} request /api/v1/account [PATCH]
- * @apiError (403) {Number} status 403
- *
- * @apiErrorExample {json} FAILED_TO_LOAD_ACCOUNT
- * {
- *   "datetime": 1570095578293,
- *   "info": "FAILED_TO_LOAD_ACCOUNT",
- *   "misc": "NO_ADDITIONAL_INFORMATION",
- *   "request": "/api/v1/account [PATCH]",
- *   "status": 403
- * }
  */
 module.exports = async (req, res) => {
   try {
     // check and validate data
-    const { firstName, lastName } = req.body;
+    const { body: { about = '', firstName = '', lastName = '' } = {} } = req;
     const expected = [
       { field: 'firstName', type: DATA_TYPES.string, value: firstName },
       { field: 'lastName', type: DATA_TYPES.string, value: lastName },
@@ -131,30 +109,14 @@ module.exports = async (req, res) => {
         _id: req.id,
       },
       {
+        about,
         firstName,
         lastName,
         updated: utils.getSeconds(),
       },
     );
 
-    // load updated User record
-    const User = await db.User.findOne({
-      _id: req.id,
-      isDeleted: false,
-    });
-    if (!User) {
-      return basic(req, res, rs[403], 'FAILED_TO_LOAD_ACCOUNT');
-    }
-
-    return data(req, res, rs[200], sm.ok, {
-      avatarLink: User.avatarLink || '',
-      created: User.created,
-      email: User.email,
-      emailIsVerified: User.emailIsVerified,
-      firstName: User.firstName,
-      lastName: User.lastName,
-      role: User.role,
-    });
+    return basic(req, res, rs[200], sm.ok);
   } catch (error) {
     return internalError(req, res, error);
   }
