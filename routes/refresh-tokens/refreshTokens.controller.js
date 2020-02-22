@@ -52,20 +52,19 @@ module.exports = async (req, res) => {
     }
 
     // check expiration #1
-    const seconds = utils.getSeconds();
-    if (seconds > Number(refreshTokenRecord.expirationDate)) {
+    if (Date.now() > Number(refreshTokenRecord.expirationDate)) {
       return basic(req, res, rs[401], sm.accessDenied);
     }
 
     // check expiration #2
     const decoded = await jwt.verify(refreshToken, config.TOKENS.refresh.secret);
-    const { id = null, refreshImage = '' } = decoded || {};
+    const { id = '', refreshImage = '' } = decoded || {};
     if (!(id && refreshImage)) {
       return basic(req, res, rs[401], sm.accessDenied);
     }
 
     // User ID comparison
-    if (id !== refreshTokenRecord.userId) {
+    if (id !== String(refreshTokenRecord.userId)) {
       return basic(req, res, rs[401], sm.accessDenied);
     }
 
@@ -79,6 +78,7 @@ module.exports = async (req, res) => {
     const tokens = await utils.generateTokens(userRecord.id, accessImageRecord.image, newRefreshImage);
 
     // store refresh token in the database
+    const seconds = utils.getSeconds();
     const RefreshToken = new db.RefreshToken({
       userId: userRecord.id,
       refreshImage,
