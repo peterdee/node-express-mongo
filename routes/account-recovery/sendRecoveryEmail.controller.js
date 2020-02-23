@@ -12,7 +12,7 @@ const { DATA_TYPES, RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {Promise<void>}
- * 
+ *
  * apiDoc:
  * @api {post} /api/v1/account-recovery/send-email Send account recovery email
  * @apiSampleRequest http://localhost:2211/api/v1/account-recovery/send-email

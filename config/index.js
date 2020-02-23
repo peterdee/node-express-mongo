@@ -17,6 +17,7 @@ const APIS = {
     login: 'login',
     logout: 'logout',
     passwordRecovery: 'password-recovery',
+    posts: 'posts',
     refreshTokens: 'refresh-tokens',
     registration: 'registration',
     verifyEmail: 'verify-email',
