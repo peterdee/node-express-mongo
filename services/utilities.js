@@ -17,6 +17,31 @@ const checkData = (fields = [], source = {}) => fields.reduce((arr, item) => {
 }, []);
 
 /**
+ * Format data for the paginated response
+ * @param count {number} - total count of the elements
+ * @param data {*[]} - data array
+ * @param pagination {{ limit: number, page: number }} - pagination object
+ * @returns {{
+ *   data: *[],
+ *   pagination: {
+ *     currentPage: number,
+ *     limit: number,
+ *     totalItems: number,
+ *     totalPages: number
+ *   }
+ * }}
+ */
+const formatPaginatedResponse = (count = 0, data = [], pagination = {}) => ({
+  data,
+  pagination: {
+    currentPage: pagination.page,
+    limit: pagination.limit,
+    totalItems: count,
+    totalPages: Math.ceil(count / pagination.limit),
+  },
+});
+
+/**
  * Generate random alpha-numeric string
  * @param length {number} - string length
  * @return {string}
@@ -71,6 +96,7 @@ const isNumber = (value) => !Number.isNaN(Number(value));
  * @param data {*} - additional data to log
  * @returns {void}
  */
+/* eslint-disable-next-line */
 const log = (text = '', data = null) => ENV === ENVS.dev && console.log(`${text}`, data || '');
 
 /**
@@ -92,6 +118,7 @@ const validateData = (items = []) => items.reduce((arr, { field = '', type = '',
 
 module.exports = {
   checkData,
+  formatPaginatedResponse,
   getSeconds,
   generateImage,
   generateString,
