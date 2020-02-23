@@ -8,7 +8,7 @@ const utils = require('../../services/utilities');
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {Promise<void>}
- * 
+ *
  * apiDoc:
  * @api {patch} /api/v1/account Update own account
  * @apiSampleRequest http://localhost:2211/api/v1/account
@@ -22,7 +22,7 @@ const utils = require('../../services/utilities');
  * {
  *   "X-Access-Token": "accessToken"
  * }
- * 
+ *
  * @apiParam {Object} data Data object, should contain { about, firstName, lastName }
  *
  * @apiParamExample {json} data
@@ -31,7 +31,7 @@ const utils = require('../../services/utilities');
  *   "firstName": "firstName",
  *   "lastName": "lastName"
  * }
- * 
+ *
  * @apiSuccess (200) {Number} datetime Response timestamp
  * @apiSuccess (200) {String} info OK
  * @apiSuccess (200) {String} misc NO_ADDITIONAL_INFORMATION
@@ -46,7 +46,7 @@ const utils = require('../../services/utilities');
  *   "request": "/api/v1/account [PATCH]",
  *   "status": 200
  * }
- * 
+ *
  * @apiError (400) {Object} data Data object, contains array of missing or invalid fields
  * @apiError (400) {Number} datetime Response timestamp
  * @apiError (400) {String} info MISSING_DATA / INVALID_DATA
