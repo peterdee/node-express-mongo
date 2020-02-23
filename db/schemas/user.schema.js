@@ -38,8 +38,14 @@ module.exports = ({ Schema }) => {
     },
   });
 
-  // add a virtual property
-  User.virtual('fullName').get(() => `${this.firstName} ${this.lastName}`);
+  // eanble populating virual fields
+  User.set('toObject', { virtuals: true });
+  User.set('toJSON', { virtuals: true });
+
+  // add a virtual property TODO: fix this
+  User.virtual('fullName').get(function getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  });
 
   return User;
 };

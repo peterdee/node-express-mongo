@@ -14,7 +14,9 @@ module.exports = async (req, res) => {
     const { pagination } = req;
 
     const [count, posts] = await Promise.all([
-      db.Post.count(),
+      db.Post.estimatedDocumentCount({
+        isDeleted: false,
+      }),
       db.Post.find(
         {
           isDeleted: false,
@@ -24,7 +26,7 @@ module.exports = async (req, res) => {
           limit: pagination.limit,
           skip: pagination.offset,
         },
-      ),
+      ).populate('authorId', 'avatarLink fullName'),
     ]);
     const formattedData = formatPaginatedResponse(count, posts, pagination);
 
