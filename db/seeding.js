@@ -35,10 +35,12 @@ module.exports = async (database) => {
     created: seconds,
     updated: seconds,
   });
-  await User.save();
 
-  // create hash
-  const hash = await bcrypt.hash(USER.password, 10);
+  // create hash, save User record
+  const [hash] = await Promise.all([
+    bcrypt.hash(USER.password, 10),
+    User.save(),
+  ]);
 
   // create Password record
   const Password = new database.Password({
