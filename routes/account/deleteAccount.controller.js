@@ -22,7 +22,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * {
  *   "X-Access-Token": "accessToken"
  * }
- * 
+ *
  * @apiSuccess (200) {Number} datetime Response timestamp
  * @apiSuccess (200) {String} info OK
  * @apiSuccess (200) {String} misc NO_ADDITIONAL_INFORMATION

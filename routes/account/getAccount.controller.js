@@ -20,7 +20,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * {
  *   "X-Access-Token": "accessToken"
  * }
- * 
+ *
  * @apiSuccess (200) {Object} data Data object, contains user account data
  * @apiSuccess (200) {Number} datetime Response timestamp
  * @apiSuccess (200) {String} info OK
