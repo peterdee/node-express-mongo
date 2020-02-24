@@ -1,13 +1,12 @@
 module.exports = ({ Schema }) => new Schema({
-  authorId: {
-    ref: 'User',
-    type: Schema.Types.ObjectId,
-  },
   postId: {
     ref: 'Post',
     type: Schema.Types.ObjectId,
   },
-  text: String,
+  userId: {
+    ref: 'User',
+    type: Schema.Types.ObjectId,
+  },
   isDeleted: {
     default: false,
     type: Boolean,
@@ -15,7 +14,7 @@ module.exports = ({ Schema }) => new Schema({
   created: Number,
   updated: Number,
   entity: {
-    default: 'Comment',
+    default: 'Favorite',
     type: String,
   },
 });
