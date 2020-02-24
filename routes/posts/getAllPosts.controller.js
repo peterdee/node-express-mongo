@@ -53,13 +53,15 @@ module.exports = async (req, res) => {
       }),
     ]);
 
-    // count the comments for the posts
+    // count the comments and favorites for the posts
     const doc = '_doc';
     const postIds = posts.map(({ _id = '' }) => _id);
     const commentsCount = await Promise.all(postIds.map((postId) => db.Comment.countDocuments({ postId })));
+    const favoritesCount = await Promise.all(postIds.map((postId) => db.Favorite.countDocuments({ postId })));
     const withComments = posts.map((post, i) => ({
       ...post[doc],
       comments: commentsCount[i],
+      favorites: favoritesCount[i],
     }));
 
     // format the response data
