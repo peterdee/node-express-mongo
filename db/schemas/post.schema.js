@@ -3,8 +3,11 @@ module.exports = ({ Schema }) => new Schema({
     ref: 'User',
     type: Schema.Types.ObjectId,
   },
+  authorName: String,
   content: String,
   imageLink: String,
+  rawText: String,
+  subtitle: String,
   title: String,
   isDeleted: {
     default: false,
