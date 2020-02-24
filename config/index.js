@@ -13,6 +13,7 @@ const APIS = {
     avatar: 'avatar',
     changeEmail: 'change-email',
     changePassword: 'change-password',
+    favorites: 'favorites',
     image: 'image',
     login: 'login',
     logout: 'logout',
