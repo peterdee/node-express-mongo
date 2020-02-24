@@ -11,22 +11,43 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  */
 module.exports = async (req, res) => {
   try {
-    const { pagination } = req;
+    const { pagination, search } = req;
 
-    const [count, posts] = await Promise.all([
-      db.Post.estimatedDocumentCount({
-        isDeleted: false,
-      }),
-      db.Post.find(
+    const regExp = {
+      $regex: search,
+      $options: 'i',
+    };
+    const query = {
+      $or: [
         {
-          isDeleted: false,
+          authorName: regExp,
         },
+        {
+          rawText: regExp,
+        },
+        {
+          subtitle: regExp,
+        },
+        {
+          title: regExp,
+        },
+      ],
+      isDeleted: false,
+    };
+    const [count, posts] = await Promise.all([
+      db.Post.countDocuments(query),
+      db.Post.find(
+        query,
         null,
         {
           limit: pagination.limit,
           skip: pagination.offset,
+          sort: '-_id',
         },
-      ).populate('authorId', 'avatarLink fullName'),
+      ).populate({
+        path: 'authorId',
+        select: 'avatarLink fullName',
+      }),
     ]);
     const formattedData = formatPaginatedResponse(count, posts, pagination);
 
