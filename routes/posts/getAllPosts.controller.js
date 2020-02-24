@@ -13,6 +13,7 @@ module.exports = async (req, res) => {
   try {
     const { pagination, search } = req;
 
+    // regular expression for the search
     const regExp = {
       $regex: search,
       $options: 'i',
@@ -34,6 +35,8 @@ module.exports = async (req, res) => {
       ],
       isDeleted: false,
     };
+
+    // get post count and post data
     const [count, posts] = await Promise.all([
       db.Post.countDocuments(query),
       db.Post.find(
@@ -49,7 +52,18 @@ module.exports = async (req, res) => {
         select: 'avatarLink fullName',
       }),
     ]);
-    const formattedData = formatPaginatedResponse(count, posts, pagination);
+
+    // count the comments for the posts
+    const doc = '_doc';
+    const postIds = posts.map(({ _id = '' }) => _id);
+    const commentsCount = await Promise.all(postIds.map((postId) => db.Comment.countDocuments({ postId })));
+    const withComments = posts.map((post, i) => ({
+      ...post[doc],
+      comments: commentsCount[i],
+    }));
+
+    // format the response data
+    const formattedData = formatPaginatedResponse(count, withComments, pagination);
 
     return data(req, res, rs[200], sm.ok, formattedData);
   } catch (error) {
