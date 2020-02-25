@@ -17,6 +17,7 @@ const accountRecovery = require('./routes/account-recovery');
 const avatar = require('./routes/avatar');
 const changeEmail = require('./routes/change-email');
 const changePassword = require('./routes/change-password');
+const comments = require('./routes/comments');
 const favorites = require('./routes/favorites');
 const image = require('./routes/image');
 const index = require('./routes/index');
@@ -58,6 +59,7 @@ app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.accountRecovery}`, account
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.avatar}`, avatar);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changeEmail}`, changeEmail);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.changePassword}`, changePassword);
+app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.comments}`, comments);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.favorites}`, favorites);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.image}`, image);
 app.use(`/${APIS.prefix}/${APIS.version}/${APIS.paths.login}`, login);
