@@ -100,7 +100,7 @@ module.exports = async (req, res) => {
     // create new Favorite record
     const seconds = getSeconds();
     const Favorite = new db.Favorite({
-      postId: id,
+      postId: post.id,
       userId: req.id,
       created: seconds,
       updated: seconds,
