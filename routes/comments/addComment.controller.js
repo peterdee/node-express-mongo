@@ -9,7 +9,7 @@ const utils = require('../../services/utilities');
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {Promise<void>}
- * 
+ *
  * apiDoc:
  * @api {post} /api/v1/comments Add comment to the post
  * @apiSampleRequest http://localhost:2211/api/v1/comments
@@ -25,7 +25,7 @@ const utils = require('../../services/utilities');
  * }
  *
  * @apiParam {Object} id Post ID
- * 
+ *
  * @apiSuccess (200) {Number} datetime Response timestamp
  * @apiSuccess (200) {String} info OK
  * @apiSuccess (200) {String} misc NO_ADDITIONAL_INFORMATION
@@ -40,7 +40,7 @@ const utils = require('../../services/utilities');
  *   "request": "/api/v1/comments [POST]",
  *   "status": 200
  * }
- * 
+ *
  * @apiError (400) {Object} data Data object, contains array of missing or invalid fields
  * @apiError (400) {Number} datetime Response timestamp
  * @apiError (400) {String} info MISSING_DATA / INVALID_DATA
@@ -77,7 +77,7 @@ const utils = require('../../services/utilities');
  *   "request": "/api/v1/comments [POST]",
  *   "status": 400
  * }
- * 
+ *
  * @apiError (404) {Number} datetime Response timestamp
  * @apiError (404) {String} info POST_NOT_FOUND
  * @apiError (404) {String} misc NO_ADDITIONAL_INFORMATION

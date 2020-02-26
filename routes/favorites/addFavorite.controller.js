@@ -8,7 +8,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {Promise<void>}
- * 
+ *
  * apiDoc:
  * @api {post} /api/v1/favorites/:id Add post to the Favorites
  * @apiSampleRequest http://localhost:2211/api/v1/favorites/:id
@@ -24,7 +24,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * }
  *
  * @apiParam {String} id Post ID
- * 
+ *
  * @apiSuccess (200) {Number} datetime Response timestamp
  * @apiSuccess (200) {String} info OK
  * @apiSuccess (200) {String} misc NO_ADDITIONAL_INFORMATION
@@ -39,7 +39,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  *   "request": "/api/v1/favorites/somepostid [POST]",
  *   "status": 200
  * }
- * 
+ *
  * @apiError (400) {Number} datetime Response timestamp
  * @apiError (400) {String} info MISSING_POST_ID
  * @apiError (400) {String} misc NO_ADDITIONAL_INFORMATION
@@ -54,7 +54,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  *   "request": "/api/v1/favorites/ [POST]",
  *   "status": 400
  * }
- * 
+ *
  * @apiError (404) {Number} datetime Response timestamp
  * @apiError (404) {String} info POST_NOT_FOUND
  * @apiError (404) {String} misc NO_ADDITIONAL_INFORMATION

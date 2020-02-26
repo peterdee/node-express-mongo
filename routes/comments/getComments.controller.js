@@ -8,7 +8,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * @param req {object} - request object
  * @param res {object} - response object
  * @returns {Promise<void>}
- * 
+ *
  * apiDoc:
  * @api {get} /api/v1/comments/:id Get all comments for a post
  * @apiSampleRequest http://localhost:2211/api/v1/comments/:id
@@ -17,7 +17,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  * @apiDescription This API allows user to get all comments for a post
  *
  * @apiParam {String} id Post ID
- * 
+ *
  * @apiSuccess (200) {Object} data Data object, contains post comments
  * @apiSuccess (200) {Number} datetime Response timestamp
  * @apiSuccess (200) {String} info OK
@@ -33,7 +33,7 @@ const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
  *   "request": "/api/v1/comments/postid [GET]",
  *   "status": 200
  * }
- * 
+ *
  * @apiError (400) {Number} datetime Response timestamp
  * @apiError (400) {String} info MISSING_POST_ID
  * @apiError (400) {String} misc NO_ADDITIONAL_INFORMATION
