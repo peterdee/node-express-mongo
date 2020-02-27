@@ -31,7 +31,7 @@ const checkData = (fields = [], source = {}) => fields.reduce((arr, item) => {
  *   }
  * }}
  */
-const formatPaginatedResponse = (count = 0, data = [], pagination = {}) => ({
+const formatPaginatedResponse = (count = 0, data = [], pagination = { limit: 1, page: 1 }) => ({
   data,
   pagination: {
     currentPage: pagination.page,
