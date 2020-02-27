@@ -1,5 +1,5 @@
 const { basic, data, internalError } = require('../../services/responses');
-// const db = require('../../db');
+const db = require('../../db');
 const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = require('../../config');
 
 /**
@@ -16,7 +16,39 @@ module.exports = async (req, res) => {
       return basic(req, res, rs[400], sm.missingPostId);
     }
 
-    return data(req, res, rs[200], sm.ok, null);
+    // get post
+    const post = await db.Post.findOne({
+      _id: id,
+      isDeleted: false,
+    }).populate({
+      path: 'authorId',
+      select: 'avatarLink firstName lastName',
+    });
+    if (!post) {
+      return basic(req, res, rs[404], sm.postNotFound);
+    }
+
+    // check if post was favorited
+    const isFavorite = (req.id && await db.Favorite.findOne({
+      isDeleted: false,
+      postId: id,
+      userId: req.id,
+    })) || false;
+
+    // get comments
+    const comments = await db.Comment.find(
+      {
+        isDeleted: false,
+        postId: id,
+      },
+      null,
+      {
+        limit: 25,
+        sort: '-_id',
+      }
+    );
+
+    return data(req, res, rs[200], sm.ok, { comments, isFavorite, post });
   } catch (error) {
     return internalError(req, res, error);
   }
