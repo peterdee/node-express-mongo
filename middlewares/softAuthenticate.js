@@ -2,30 +2,29 @@ const jwt = require('jsonwebtoken');
 
 const config = require('../config');
 const db = require('../db');
-const { basic } = require('../services/responses');
-
-const { RESPONSE_STATUSES: rs, SERVER_MESSAGES: sm } = config;
 
 /**
- * Authenticate user
+ * Soft authentication
  * @param req {object} - request object
  * @param res {object} - response object
  * @param next {*} - continue to the next controller or middleware
- * @return {Promise<void|*>}
+ * @return {Promise<*>}
  */
 module.exports = async (req, res, next) => {
   try {
     // check if access token is provided
     const { 'x-access-token': accessToken = '' } = req.headers || {};
     if (!accessToken) {
-      return basic(req, res, rs[401], sm.missingToken);
+      req.id = null;
+      return next();
     }
 
     // get user ID and access image from the token
     const decoded = await jwt.verify(accessToken, config.TOKENS.access.secret);
     const { accessImage = '', id = null } = decoded || {};
     if (!(accessImage && id)) {
-      return basic(req, res, rs[401], sm.invalidToken);
+      req.id = null;
+      return next();
     }
 
     // check data in the database
@@ -41,13 +40,15 @@ module.exports = async (req, res, next) => {
       }),
     ]);
     if (!(accessImageRecord && userRecord)) {
-      return basic(req, res, rs[401], sm.accessDenied);
+      req.id = null;
+      return next();
     }
 
     // compare Access Image
     const { image = '' } = accessImageRecord;
     if (!(image && image === accessImage)) {
-      return basic(req, res, rs[401], sm.invalidToken);
+      req.id = null;
+      return next();
     }
 
     // continue
@@ -56,11 +57,7 @@ module.exports = async (req, res, next) => {
     req.user = userRecord;
     return next();
   } catch (err) {
-    // check for expiration error
-    if (err.name && err.name === 'TokenExpiredError') {
-      return basic(req, res, rs[401], sm.tokenExpired);
-    }
-
-    return basic(req, res, rs[401], sm.invalidToken);
+    req.id = null;
+    return next();
   }
 };
