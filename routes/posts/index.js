@@ -10,7 +10,7 @@ const softAuthenticate = require('../../middlewares/softAuthenticate');
 
 const router = express.Router();
 
-router.get('/all', paginate, search, getAllPosts);
+router.get('/all', softAuthenticate, paginate, search, getAllPosts);
 router.delete('/delete/:id', authenticate, deletePost);
 router.get('/id/:id', softAuthenticate, getSinglePost);
 

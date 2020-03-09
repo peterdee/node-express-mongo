@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
       {
         limit: 25,
         sort: '-_id',
-      }
+      },
     );
 
     return data(req, res, rs[200], sm.ok, { comments, isFavorite, post });

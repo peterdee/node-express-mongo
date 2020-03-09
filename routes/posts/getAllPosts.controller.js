@@ -63,16 +63,35 @@ module.exports = async (req, res) => {
       (postId = '') => db.Favorite.countDocuments({ postId }),
     ));
 
-    // TODO: determine if the post was favorited (if user is logged in)
+    // get all of the Favorite posts
+    const favoritedPosts = (req.id && await Promise.all(postIds.map((id) => db.Favorite.findOne({
+      isDeleted: false,
+      postId: id,
+      userId: req.id,
+    })))).map(({ postId }) => postId) || [];
 
-    const withComments = posts.map((post, i) => ({
-      ...post[doc],
+    // add the Favorite status
+    const withFavorites = favoritedPosts.length === 0
+      ? posts.map((post) => ({ ...post[doc] }))
+      : posts.map((post) => {
+        if (favoritedPosts.includes(post.id)) {
+          return {
+            ...post[doc],
+            isFavorite: true,
+          };
+        }
+        return { ...post[doc] };
+      });
+
+    // add counts
+    const withCounts = withFavorites.map((post, i) => ({
+      ...post,
       comments: commentsCount[i],
       favorites: favoritesCount[i],
     }));
 
     // format the response data
-    const formattedData = formatPaginatedResponse(count, withComments, pagination);
+    const formattedData = formatPaginatedResponse(count, withCounts, pagination);
 
     return data(req, res, rs[200], sm.ok, formattedData);
   } catch (error) {
