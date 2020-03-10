@@ -1,7 +1,7 @@
 const { ENV, SERVER_NAME, SERVER_MESSAGES: sm } = require('../config');
 
 module.exports = {
-    /**
+  /**
    * Create an account recovery template
    * @param recoveryLink {string} - recovery link
    * @param userName {string} - user name
@@ -55,7 +55,7 @@ module.exports = {
 </div>
     `,
   }),
-    /**
+  /**
    * Create an internal error template
    * @param error {string|*} - error to be sent
    * @returns {{ subject: string, template: string }}
