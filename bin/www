@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 if (process.env.APP_ENV !== 'heroku') {
+  /* eslint-disable-next-line */
   const env = require('dotenv').config();
 
   if (env.error) {
